@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V&A Museum World Collection Map</title>
+
+  <!-- leaflet map library css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+  <!-- google fonts - lora for headings, lato for body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- my stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- header -->
+  <div id="header">
+    <div>
+      <h1>V&amp;A <em>World Collection</em></h1>
+      <p>Click any country to explore the collection</p>
+    </div>
+  </div>
+
+  <!-- the map goes here, leaflet fills this div -->
+  <div id="map"></div>
+  <div id="map-tooltip"></div>
+  <div id="hint">← <span>Click any country</span> to browse artefacts →</div>
+
+  <!-- popup that appears when you click a country -->
+  <div id="overlay" onclick="handleOverlayClick(event)">
+    <div id="panel-card">
+
+      <div id="panel-topbar">
+        <div id="panel-topbar-left">
+          <div id="panel-country-name"></div>
+          <div id="panel-result-count"></div>
+        </div>
+        <div id="panel-topbar-right">
+          <select id="panel-category" onchange="fetchArtefacts(1)">
+            <option value="">All categories</option>
+            <option value="THES48904">Ceramics</option>
+            <option value="THES49003">Fashion</option>
+            <option value="THES48943">Furniture</option>
+            <option value="THES48986">Jewellery</option>
+            <option value="THES49056">Photographs</option>
+            <option value="THES49070">Sculpture</option>
+            <option value="THES49093">Textiles</option>
+            <option value="THES49048">Paintings</option>
+          </select>
+          <button id="panel-close-btn" onclick="closeCountryPanel()">✕</button>
+        </div>
+      </div>
+
+      <div id="panel-body">
+        <div id="panel-loading"><div class="spinner"></div><p>Searching the collection…</p></div>
+        <div id="panel-empty">No artefacts found for this selection.</div>
+        <div id="panel-error">Could not reach the V&amp;A API. Check your connection.</div>
+        <div id="panel-grid"></div>
+        <div id="panel-pagination"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- second popup for when you click an individual artefact card -->
+  <div id="detail-overlay" onclick="handleDetailOverlayClick(event)">
+    <div id="detail-card">
+      <div id="detail-top">
+        <div id="detail-image-wrap"></div>
+        <div id="detail-info">
+          <button id="detail-close" onclick="closeDetail()">✕</button>
+          <div id="detail-object-type"></div>
+          <div id="detail-title"></div>
+          <div class="detail-meta-row">
+            <span class="detail-meta-label">Place</span>
+            <span class="detail-meta-value" id="detail-place"></span>
+          </div>
+          <div class="detail-meta-row">
+            <span class="detail-meta-label">Date</span>
+            <span class="detail-meta-value" id="detail-date"></span>
+          </div>
+          <div class="detail-meta-row">
+            <span class="detail-meta-label">Artist</span>
+            <span class="detail-meta-value" id="detail-artist"></span>
+          </div>
+          <div class="detail-meta-row">
+            <span class="detail-meta-label">Collection</span>
+            <span class="detail-meta-value" id="detail-collection"></span>
+          </div>
+        </div>
+      </div>
+      <div id="detail-footer">
+        <span id="detail-accession"></span>
+        <a id="detail-va-link" href="#" target="_blank" rel="noopener noreferrer">
+          View full record on V&amp;A ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- leaflet map library js - has to load before my script.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+  <!-- my javascript -->
+  <script src="script.js"></script>
+
+</body>
+</html>

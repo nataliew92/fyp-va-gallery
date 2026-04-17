@@ -1,0 +1,499 @@
+*,
+*::before,
+*::after { 
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* defining some custom colours as CSS variables for easy reuse and theming */
+:root {
+  --accent:      #1a5276;
+  --accent-dark: #154360;
+  --accent-light:#a0cfee;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Lato', sans-serif;
+  background: #f5f2ee;
+  color: #1a1714;
+  overflow: hidden;
+}
+
+/* header bar at the top of the page */
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background-color: var(--accent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  height: 56px;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#header h1 {
+  font-family: 'Lora', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+#header h1 em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+#header p {
+  font-size: 12px;
+  color: white;
+  font-weight: 300;
+}
+
+/* the map - takes up the whole screen behind everything else */
+#map {
+  position: fixed;
+  top: 56px; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+}
+
+.leaflet-control-attribution {
+  font-size: 9px;
+  opacity: 0.4;
+}
+
+#map-tooltip {
+  position: fixed;
+  z-index: 900;
+  background-color: rgba(250,248,245,0.95);
+  border: 1px solid rgba(0,0,0,0.12);
+  color: #1a1714;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+  display: none;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* the little pill at the bottom that tells users to click a country */
+#hint {
+  position: fixed; bottom: 2rem; left: 50%;
+  transform: translateX(-50%); z-index: 900;
+  background-color: rgba(250,248,245,0.92);
+  border: 1px solid rgba(0,0,0,0.1);
+  backdrop-filter: blur(8px); border-radius: 30px;
+  padding: 0.6rem 1.25rem; font-size: 12px;
+  color: rgba(0,0,0,0.5); pointer-events: none;
+  white-space: nowrap; transition: opacity 0.4s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+#hint span { 
+  color: var(--accent);
+  font-weight: 500;
+}
+
+body.panel-open #hint {
+  opacity: 0;
+}
+
+
+/* 
+   this is the big popup that appears when you click a country
+   the map stays visible (blurred) behind it
+*/
+#overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background-color: rgba(240,236,230,0.7);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+body.panel-open #overlay { opacity: 1; pointer-events: all; }
+
+#panel-card {
+  background-color: #faf8f5;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 960px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+  transform: translateY(20px) scale(0.98);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+
+body.panel-open #panel-card { transform: translateY(0) scale(1); }
+
+/* top bar inside the popup - has the country name, category filter and close button */
+#panel-topbar {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-shrink: 0;
+}
+
+#panel-topbar-left { display: flex; align-items: baseline; gap: 0.75rem; }
+
+#panel-country-name {
+  font-family: 'Lora', serif;
+  font-size: 1.4rem; font-weight: 500; color: #1a1714;
+}
+
+#panel-result-count { font-size: 12px; color: rgba(0,0,0,0.4); }
+#panel-result-count strong { color: var(--accent); font-weight: 500; }
+
+#panel-topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+#panel-category {
+  background-color: white; border: 1px solid rgba(0,0,0,0.12); border-radius: 6px;
+  color: #1a1714; font-family: 'Lato', sans-serif; font-size: 13px;
+  padding: 0.4rem 0.75rem; appearance: none; cursor: pointer; min-width: 160px;
+  transition: border-color 0.15s;
+}
+
+#panel-category:focus { outline: none; border-color: var(--accent); }
+
+#panel-close-btn {
+  background-color: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);
+  color: rgba(0,0,0,0.4); width: 32px; height: 32px; border-radius: 50%;
+  font-size: 15px; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.15s; flex-shrink: 0;
+}
+
+#panel-close-btn:hover { background-color: rgba(0,0,0,0.1); color: #1a1714; }
+
+/* the scrollable area where all the artefact cards appear */
+#panel-body {
+  flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem;
+  scroll-behavior: smooth;
+}
+
+#panel-body::-webkit-scrollbar { width: 5px; }
+#panel-body::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.12); border-radius: 3px; }
+
+#panel-loading {
+  display: none; text-align: center; padding: 4rem 1rem; color: rgba(0,0,0,0.3);
+}
+
+.spinner {
+  width: 30px; height: 30px;
+  border: 2px solid rgba(26,82,118,0.15); border-top-color: var(--accent);
+  border-radius: 50%; margin: 0 auto 0.75rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#panel-empty, #panel-error {
+  display: none; text-align: center; padding: 3rem 1rem;
+  color: rgba(0,0,0,0.35); font-size: 13px; font-style: italic;
+}
+
+/* grid layout for the cards - auto fills columns based on available space */
+#panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+}
+
+/* individual artefact cards */
+.card {
+  background-color: white; border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 10px; overflow: hidden; cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.15s;
+  position: relative; z-index: 600;
+}
+
+.card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-3px); }
+
+.card-img {
+  aspect-ratio: 1; background-color: #f0ede8; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s; }
+.card:hover .card-img img { transform: scale(1.05); }
+.card-img .no-img { font-size: 10px; color: rgba(0,0,0,0.25); font-style: italic; padding: 0.5rem; text-align: center; }
+
+.card-body {
+  padding: 0.6rem 0.75rem 0.8rem;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  margin-bottom: 3px;
+  color: #1a1714;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.card-date {
+  font-size: 11px;
+  color: rgba(0,0,0,0.4);
+}
+
+.card-place-badge {
+  display: inline-block;
+  font-size: 10px;
+  background-color: rgba(26,82,118,0.1);
+  color: var(--accent);
+  border-radius: 3px;
+  padding: 1px 6px;
+  margin-bottom: 4px; }
+
+
+/* next/prev page buttons at the bottom */
+#panel-pagination {
+  padding: 1rem 0 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  color: rgba(0,0,0,0.5);
+  border-radius: 5px;
+  padding: 0.35rem 0.7rem;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.page-btn.active { 
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.page-btn:disabled { 
+  opacity: 0.25; 
+  cursor: not-allowed; 
+}
+
+/* 
+   second popup that appears when you click on an individual artefact card
+   shows more info about that specific object
+*/
+#detail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background-color: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+#detail-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#detail-card {
+  background-color: #faf8f5;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 88vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95);
+  transition: transform 0.25s;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+#detail-overlay.visible #detail-card {
+  transform: scale(1);
+}
+
+#detail-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+#detail-card::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
+}
+
+#detail-top {
+  display: flex;
+  min-height: 300px;
+}
+
+#detail-image-wrap {
+  width: 300px;
+  flex-shrink: 0;
+  background-color: #f0ede8;
+  border-radius: 14px 0 0 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#detail-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#detail-image-wrap .detail-no-img {
+  font-size: 12px;
+  color: rgba(0,0,0,0.25);
+  font-style: italic;
+  padding: 2rem;
+  text-align: center;
+}
+
+#detail-info { 
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#detail-close {
+  align-self: flex-end;
+  background-color: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: rgba(0,0,0,0.4);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+#detail-close:hover {
+  background-color: rgba(0,0,0,0.1);
+  color: #1a1714;
+}
+
+#detail-object-type { 
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem; 
+}
+
+#detail-title { 
+  font-family: 'Lora',
+  serif; font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #1a1714;
+  margin-bottom: 1rem;
+}
+
+.detail-meta-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 13px;
+  align-items: baseline;
+
+}
+.detail-meta-label { 
+  color: rgba(0,0,0,0.35);
+  font-size: 11px;
+  min-width: 64px;
+  flex-shrink: 0; 
+}
+
+.detail-meta-value {
+  color: rgba(0,0,0,0.75);
+}
+
+#detail-footer {
+  padding: 1rem 1.5rem 1.25rem;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+#detail-accession { 
+  font-size: 11px;
+  color: rgba(0,0,0,0.25);
+  font-family: monospace;
+}
+
+#detail-va-link {
+  display: inline-block;
+  padding: 0.55rem 1.25rem; 
+  background-color: var(--accent);
+  color: white;
+  border-radius: 7px;
+  text-decoration: none; 
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.15s;
+  white-space: nowrap;
+}
+
+#detail-va-link:hover{
+  background-color: var(--accent-dark);
+}
+
+
+@media (max-width: 700px) {
+  #panel-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  #detail-top {
+    flex-direction: column;
+  }
+  #detail-image-wrap
+  { width: 100%;
+    min-height: 220px;
+    border-radius: 14px 14px 0 0;
+  }
+}
