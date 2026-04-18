@@ -156,5 +156,83 @@
   <button id="pill-close" onclick="dismissPill()">✕</button>
 </div>
 
+<!-- inspiration menu -->
+<button id="inspo-trigger" onclick="openInspo()">
+  <span class="trigger-spark">✦</span>
+  <span>Need some<br>inspiration?</span>
+</button>
+
+<div id="inspo-overlay" onclick="closeInspo()"></div>
+
+<div id="inspo-panel">
+
+  <button id="inspo-close" onclick="closeInspo()">✕</button>
+
+  <div id="inspo-heading">
+    <span class="heading-globe">🌍</span>
+    Need some inspiration?
+  </div>
+  <div id="inspo-sub">Pick an option from each box & we'll find something for you</div>
+
+  <div id="inspo-sentence">
+
+    <span class="inspo-word">Show me</span>
+
+    <div class="inspo-selector" id="sel-category">
+      <button class="inspo-selector-btn" onclick="toggleSelector('category')">
+        <span class="sel-emoji">🏺</span>
+        <span class="sel-label">Ceramics</span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="inspo-options" id="opts-category">
+        <div class="inspo-option selected" onclick="pick('category','Ceramics','THES48904','🏺')"><span class="opt-emoji">🏺</span>Ceramics</div>
+        <div class="inspo-option" onclick="pick('category','Jewellery','THES48986','💍')"><span class="opt-emoji">💍</span>Jewellery</div>
+        <div class="inspo-option" onclick="pick('category','Textiles','THES49093','🧵')"><span class="opt-emoji">🧵</span>Textiles</div>
+        <div class="inspo-option" onclick="pick('category','Sculpture','THES49070','🗿')"><span class="opt-emoji">🗿</span>Sculpture</div>
+        <div class="inspo-option" onclick="pick('category','Paintings','THES49048','🖼️')"><span class="opt-emoji">🖼️</span>Paintings</div>
+        <div class="inspo-option" onclick="pick('category','Fashion','THES49003','👗')"><span class="opt-emoji">👗</span>Fashion</div>
+        <div class="inspo-option" onclick="pick('category','Furniture','THES48943','🪑')"><span class="opt-emoji">🪑</span>Furniture</div>
+        <div class="inspo-option" onclick="pick('category','Photographs','THES49056','📷')"><span class="opt-emoji">📷</span>Photographs</div>
+      </div>
+    </div>
+
+    <span class="inspo-word">from</span>
+
+    <div class="inspo-selector" id="sel-country">
+      <button class="inspo-selector-btn" onclick="toggleSelector('country')">
+        <span class="fi fi-jp sel-flag"></span>
+        <span class="sel-label">Japan</span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="inspo-options" id="opts-country">
+        <div class="inspo-option selected" onclick="pick('country','Japan','Japan','jp')"><span class="fi fi-jp"></span>Japan</div>
+        <div class="inspo-option" onclick="pick('country','China','China','cn')"><span class="fi fi-cn"></span>China</div>
+        <div class="inspo-option" onclick="pick('country','India','India','in')"><span class="fi fi-in"></span>India</div>
+        <div class="inspo-option" onclick="pick('country','Italy','Italy','it')"><span class="fi fi-it"></span>Italy</div>
+        <div class="inspo-option" onclick="pick('country','France','France','fr')"><span class="fi fi-fr"></span>France</div>
+        <div class="inspo-option" onclick="pick('country','Egypt','Egypt','eg')"><span class="fi fi-eg"></span>Egypt</div>
+        <div class="inspo-option" onclick="pick('country','England','England','gb-eng')"><span class="fi fi-gb-eng"></span>England</div>
+        <div class="inspo-option" onclick="pick('country','Iran','Iran','ir')"><span class="fi fi-ir"></span>Iran</div>
+        <div class="inspo-option" onclick="pick('country','Turkey','Turkey','tr')"><span class="fi fi-tr"></span>Turkey</div>
+        <div class="inspo-option" onclick="pick('country','Germany','Germany','de')"><span class="fi fi-de"></span>Germany</div>
+        <div class="inspo-option" onclick="pick('country','Spain','Spain','es')"><span class="fi fi-es"></span>Spain</div>
+        <div class="inspo-option" onclick="pick('country','Korea','Korea','kr')"><span class="fi fi-kr"></span>Korea</div>
+      </div>
+    </div>
+
+  </div>
+
+  <button id="inspo-discover" onclick="discover()">
+    <span class="discover-spark">✦</span> Discover
+  </button>
+
+  <div id="inspo-result"></div>
+
+  <button id="inspo-shuffle" onclick="shuffle()">
+    <span class="shuffle-icon">✦</span> Surprise me
+  </button>
+
+</div>
+
 </body>
 </html>

@@ -161,16 +161,71 @@ function onClick(e) {
 
 map.on('click', () => closeCountryPanel());
 
+// stores any active inspiration filters
+let inspoOverride = null;
 
-// functions to open and close the country popup
-function openCountryPanel(countryName) {
+// functions to open and close the country popup - also added a function to correctly categorise the artefacts by country
+function openCountryPanel(countryName, preselectCategory) {
   activeCountry = countryName;
   currentPage   = 1;
-  document.getElementById('panel-category').value = '';
   document.getElementById('panel-country-name').textContent = countryName;
   document.getElementById('panel-result-count').textContent = '';
   document.body.classList.add('panel-open');
-  fetchArtefacts(1);
+
+  if (preselectCategory) {
+    // if coming from inspiration menu, let loadCategories
+    // handle the first fetch once it has the real category ID
+    loadCategories(countryName, preselectCategory);
+  } else {
+    // normal country click - load categories and fetch straight away
+    loadCategories(countryName);
+    fetchArtefacts(1);
+  }
+}
+
+function loadCategories(countryName, preselectLabel) {
+  const select = document.getElementById('panel-category');
+  select.innerHTML = '<option value="">Loading categories...</option>';
+  select.disabled = true;
+
+  const url = `https://api.vam.ac.uk/v2/objects/clusters/category/search?q_place_name=${encodeURIComponent(countryName)}&cluster_size=100`;
+
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      let options = '<option value="">All categories</option>';
+      data
+        .filter(cat => cat.id && cat.value && cat.count > 0)
+        .sort((a, b) => a.value.localeCompare(b.value))
+        .forEach(cat => {
+          options += `<option value="${cat.id}">${cat.value} (${cat.count.toLocaleString()})</option>`;
+        });
+      select.innerHTML = options;
+      select.disabled  = false;
+
+      // if we have a category to preselect, find it and re-fetch with it
+      if (preselectLabel) {
+        const match = data.find(cat => cat.value.toLowerCase() === preselectLabel.toLowerCase());
+        if (match) {
+          select.value = match.id;
+          inspoOverride = { category: match.id, keyword: null };
+          fetchArtefacts(1);
+        }
+      }
+    })
+    .catch(() => {
+      select.innerHTML = `
+        <option value="">All categories</option>
+        <option value="THES48904">Ceramics</option>
+        <option value="THES49003">Fashion</option>
+        <option value="THES48943">Furniture</option>
+        <option value="THES48986">Jewellery</option>
+        <option value="THES49056">Photographs</option>
+        <option value="THES49070">Sculpture</option>
+        <option value="THES49093">Textiles</option>
+        <option value="THES49048">Paintings</option>`;
+      select.disabled = false;
+    });
 }
 
 function closeCountryPanel() {
@@ -184,13 +239,13 @@ function handleOverlayClick(e) {
   if (e.target === document.getElementById('overlay')) closeCountryPanel();
 }
 
-
 // this is where the actual API call happens - sends a request to the V&A and gets artefacts back
 function fetchArtefacts(page = 1) {
   if (!activeCountry) return;
   currentPage = page;
 
-  const category = document.getElementById('panel-category').value;
+  const category = inspoOverride?.category || document.getElementById('panel-category').value;
+  const keyword  = inspoOverride?.keyword  || '';
   const params   = new URLSearchParams();
 
   params.set('q_place_name',   activeCountry);
@@ -198,6 +253,7 @@ function fetchArtefacts(page = 1) {
   params.set('page_size',      PAGE_SIZE);
   params.set('page',           currentPage);
   if (category) params.set('id_category', category);
+  if (keyword)  params.set('q', keyword);
 
   showLoading();
 
@@ -342,3 +398,108 @@ function showError() {
   hideLoading();
   document.getElementById('panel-error').style.display = 'block';
 }
+
+// inspiration menu
+
+const inspoSelections = {
+  category: { label:'Ceramics', value:'THES48904', emoji:'🏺' },
+  country:  { label:'Japan',    value:'Japan',     flag:'jp' },
+};
+
+function openInspo() {
+  document.getElementById('inspo-overlay').classList.add('visible');
+  document.getElementById('inspo-panel').classList.add('visible');
+}
+
+function closeInspo() {
+  document.getElementById('inspo-overlay').classList.remove('visible');
+  document.getElementById('inspo-panel').classList.remove('visible');
+  closeAllSelectors();
+}
+
+function toggleSelector(type) {
+  const opts   = document.getElementById('opts-' + type);
+  const btn    = document.querySelector('#sel-' + type + ' .inspo-selector-btn');
+  const isOpen = opts.classList.contains('open');
+  closeAllSelectors();
+  if (!isOpen) {
+    opts.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeAllSelectors() {
+  document.querySelectorAll('.inspo-options').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.inspo-selector-btn').forEach(el => el.classList.remove('open'));
+}
+
+function pick(type, label, value, extra) {
+  const btn = document.querySelector('#sel-' + type + ' .inspo-selector-btn');
+
+  if (type === 'category') {
+    inspoSelections.category = { label, value, emoji: extra };
+    btn.querySelector('.sel-emoji').textContent = extra;
+  } else if (type === 'country') {
+    inspoSelections.country = { label, value, flag: extra };
+    const flagEl = btn.querySelector('.sel-flag');
+    flagEl.className = 'fi fi-' + extra + ' sel-flag';
+  }
+
+  btn.querySelector('.sel-label').textContent = label;
+
+  document.querySelectorAll('#opts-' + type + ' .inspo-option').forEach(el => {
+    el.classList.toggle('selected', el.textContent.trim().includes(label));
+  });
+
+  closeAllSelectors();
+  document.getElementById('inspo-result').classList.remove('visible');
+}
+
+function discover() {
+  const { category, country } = inspoSelections;
+  inspoOverride = null;
+  closeInspo();
+  openCountryPanel(country.value, category.label);
+}
+
+const inspoAllOptions = {
+  category: [
+    {label:'Ceramics',value:'THES48904',emoji:'🏺'},
+    {label:'Jewellery',value:'THES48986',emoji:'💍'},
+    {label:'Textiles',value:'THES49093',emoji:'🧵'},
+    {label:'Sculpture',value:'THES49070',emoji:'🗿'},
+    {label:'Paintings',value:'THES49048',emoji:'🖼️'},
+    {label:'Fashion',value:'THES49003',emoji:'👗'},
+    {label:'Furniture',value:'THES48943',emoji:'🪑'},
+    {label:'Photographs',value:'THES49056',emoji:'📷'},
+  ],
+  country: [
+    {label:'Japan',value:'Japan',flag:'jp'},
+    {label:'China',value:'China',flag:'cn'},
+    {label:'India',value:'India',flag:'in'},
+    {label:'Italy',value:'Italy',flag:'it'},
+    {label:'France',value:'France',flag:'fr'},
+    {label:'Egypt',value:'Egypt',flag:'eg'},
+    {label:'England',value:'England',flag:'gb-eng'},
+    {label:'Iran',value:'Iran',flag:'ir'},
+    {label:'Turkey',value:'Turkey',flag:'tr'},
+    {label:'Germany',value:'Germany',flag:'de'},
+    {label:'Spain',value:'Spain',flag:'es'},
+    {label:'Korea',value:'Korea',flag:'kr'},
+  ],
+};
+
+function shuffle() {
+  ['category','country'].forEach(type => {
+    const opts   = inspoAllOptions[type];
+    const picked = opts[Math.floor(Math.random() * opts.length)];
+    if (type === 'category') pick(type, picked.label, picked.value, picked.emoji);
+    else pick(type, picked.label, picked.value, picked.flag);
+  });
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.inspo-selector') && !e.target.closest('#inspo-trigger')) {
+    closeAllSelectors();
+  }
+});
