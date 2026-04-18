@@ -27,19 +27,22 @@ html, body {
   top: 0; left: 0; right: 0;
   z-index: 1000;
   background-color: var(--accent);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  height: 56px;
+  height: 70px;
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+#header-left {
+  flex-shrink: 0;
 }
 
 #header h1 {
   font-family: 'Lora', serif;
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #ffffff;
   white-space: nowrap;
 }
@@ -50,15 +53,64 @@ html, body {
 }
 
 #header p {
-  font-size: 12px;
+  font-size: 14px;
   color: white;
-  font-weight: 300;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+#header-suggestions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+#header-suggestions-label {
+  font-size: 14px;
+  color: white;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+
+.suggestion-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.3rem 0.8rem;
+  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.suggestion-chip:hover {
+  background-color: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.5);
+  color: white;
+}
+
+.suggestion-chip .fi {
+  width: 1.2em;
+  height: 0.9em;
+  border-radius: 2px;
 }
 
 /* the map - takes up the whole screen behind everything else */
 #map {
   position: fixed;
-  top: 56px; left: 0; right: 0; bottom: 0;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
 }
 
@@ -83,29 +135,6 @@ html, body {
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
-/* the little pill at the bottom that tells users to click a country */
-#hint {
-  position: fixed; bottom: 2rem; left: 50%;
-  transform: translateX(-50%); z-index: 900;
-  background-color: rgba(250,248,245,0.92);
-  border: 1px solid rgba(0,0,0,0.1);
-  backdrop-filter: blur(8px); border-radius: 30px;
-  padding: 0.6rem 1.25rem; font-size: 12px;
-  color: rgba(0,0,0,0.5); pointer-events: none;
-  white-space: nowrap; transition: opacity 0.4s;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-}
-
-#hint span { 
-  color: var(--accent);
-  font-weight: 500;
-}
-
-body.panel-open #hint {
-  opacity: 0;
-}
-
 
 /* 
    this is the big popup that appears when you click a country
@@ -496,4 +525,221 @@ body.panel-open #panel-card { transform: translateY(0) scale(1); }
     min-height: 220px;
     border-radius: 14px 14px 0 0;
   }
+}
+
+/* full screen intro */
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-image: url('images/2023NP7023.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+#intro.dismissing {
+  animation: intro-out 0.5s ease forwards;
+}
+
+@keyframes intro-out {
+  to { opacity: 0; }
+}
+
+#intro-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(26,82,118,0.25);
+}
+
+#intro-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 540px;
+  padding: 2.5rem 3rem;
+  background-color: rgba(26,82,118,0.5);
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+}
+
+#intro-eyebrow {
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 1rem;
+  animation: rise 0.6s 0.2s both;
+}
+
+#intro-heading {
+  font-family: 'Lora', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  animation: rise 0.6s 0.35s both;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+}
+
+#intro-heading em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+#intro-body {
+  font-size: 16px;
+  color: white;
+  line-height: 1.75;
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  animation: rise 0.6s 0.5s both;
+}
+
+#intro-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 2rem;
+  background-color: white;
+  color: var(--accent);
+  border: none;
+  border-radius: 30px;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.15s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  animation: rise 0.6s 0.65s both;
+}
+
+#intro-cta:hover {
+  background-color: var(--accent-light);
+  transform: translateY(-2px);
+}
+
+#intro-skip {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.15s;
+  animation: rise 0.6s 0.8s both;
+}
+
+#intro-skip:hover { color: rgba(255,255,255,0.5); }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* bottom pill */
+#pill {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  background-color: var(--accent);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(160,207,238,0.3);
+  border-radius: 50px;
+  padding: 0.8rem 1.5rem 0.8rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+#pill.visible {
+  opacity: 1;
+  pointer-events: all;
+  animation: pill-enter 0.4s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+
+#pill.dismissed {
+  opacity: 0;
+  transform: translateX(-50%) translateY(16px);
+}
+
+@keyframes pill-enter {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+#pill-icon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#pill-ripple {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(160,207,238,0.7);
+  opacity: 0;
+  animation: pill-ripple 2s ease-out infinite;
+}
+
+@keyframes pill-ripple {
+  0%,25% { transform: scale(0.4); opacity: 0; }
+  30%    { transform: scale(0.4); opacity: 1; }
+  70%    { transform: scale(1.9); opacity: 0; }
+  100%   { transform: scale(0.4); opacity: 0; }
+}
+
+#pill-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#pill-main {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+}
+
+#pill-hint {
+  font-size: 14px;
+  color: white;
+  font-weight: 300;
+}
+
+#pill-close {
+  width: 22px;
+  height: 22px;
+  background-color: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+#pill-close:hover {
+  background-color: rgba(255,255,255,0.2);
+  color: white;
 }

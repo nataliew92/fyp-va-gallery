@@ -1,3 +1,34 @@
+// intro and pill onboarding
+
+function dismissIntro() {
+  const intro = document.getElementById('intro');
+  intro.classList.add('dismissing');
+  setTimeout(() => {
+    intro.style.display = 'none';
+    showPill();
+  }, 500);
+}
+
+function handleIntroClick(e) {
+  // only dismiss if clicking the background, not the button
+  if (e.target === document.getElementById('intro') ||
+      e.target === document.getElementById('intro-overlay') ||
+      e.target === document.getElementById('intro-skip')) {
+    dismissIntro();
+  }
+}
+
+function showPill() {
+  const pill = document.getElementById('pill');
+  pill.classList.add('visible');
+}
+
+function dismissPill() {
+  const pill = document.getElementById('pill');
+  pill.classList.add('dismissed');
+  setTimeout(() => pill.remove(), 500);
+}
+
 // URLs for the V&A API and a variable to control how many results per page
 const API_BASE   = 'https://api.vam.ac.uk/v2/objects/search';
 const IMAGE_BASE = 'https://framemark.vam.ac.uk/collections';
@@ -29,6 +60,10 @@ const NAME_FIXES = {
 
 function normaliseName(raw) { return NAME_FIXES[raw] || raw; }
 
+// called when a suggestion chip in the header is clicked
+function openSuggestion(countryName) {
+  openCountryPanel(countryName);
+}
 
 // setting up the leaflet map - center it on europe and set zoom limits so it doesn't go too far out
 const map = L.map('map', {
@@ -45,20 +80,40 @@ map.zoomControl.setPosition('bottomright');
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
   attribution: '© CARTO © OpenStreetMap',
-  subdomains: 'abcd', maxZoom: 19,
+  subdomains: 'abcd',
+  maxZoom: 19,
   noWrap: true,
 }).addTo(map);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd', maxZoom: 19, pane: 'overlayPane',
+  subdomains: 'abcd',
+  maxZoom: 19,
+  pane: 'overlayPane',
   noWrap: true,
 }).addTo(map);
 
 
 // styles for the country polygons - default (invisible), hovered and selected (navy blue)
-const styleDefault  = { fillColor:'#000000', fillOpacity:0,    color:'rgba(0,0,0,0.15)', weight:0.5, opacity:1 };
-const styleHover    = { fillColor:'#1a5276', fillOpacity:0.2,  color:'#1a5276',          weight:2,   opacity:1 };
-const styleSelected = { fillColor:'#1a5276', fillOpacity:0.35, color:'#1a5276',          weight:2.5, opacity:1 };
+const styleDefault  = {
+  fillColor:'#000000',
+  fillOpacity:0,
+  color:'rgba(0,0,0,0.15)',
+  weight:0.5, opacity:1
+};
+
+const styleHover    = {
+  fillColor:'#1a5276',
+  fillOpacity:0.2,
+  color:'#1a5276',
+  weight:2,
+  opacity:1 };
+
+const styleSelected = {
+  fillColor:'#1a5276',
+  fillOpacity:0.35, color:'#1a5276',
+  weight:2.5,
+  opacity:1
+};
 
 
 // fetch the world map geojson file from github - this gives us all the country shapes and names

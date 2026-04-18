@@ -12,6 +12,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
+  <!-- flag icons for the suggestion chips in the header -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
+
   <!-- my stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -19,9 +22,18 @@
 
   <!-- header -->
   <div id="header">
-    <div>
+    <div id="header-left">
       <h1>V&amp;A <em>World Collection</em></h1>
       <p>Click any country to explore the collection</p>
+    </div>
+    <div id="header-suggestions">
+      <span id="header-suggestions-label">Start exploring →</span>
+      <button class="suggestion-chip" onclick="openSuggestion('Japan')"><span class="fi fi-jp"></span> Japan</button>
+      <button class="suggestion-chip" onclick="openSuggestion('China')"><span class="fi fi-cn"></span> China</button>
+      <button class="suggestion-chip" onclick="openSuggestion('India')"><span class="fi fi-in"></span> India</button>
+      <button class="suggestion-chip" onclick="openSuggestion('Italy')"><span class="fi fi-it"></span> Italy</button>
+      <button class="suggestion-chip" onclick="openSuggestion('Egypt')"><span class="fi fi-eg"></span> Egypt</button>
+      <button class="suggestion-chip" onclick="openSuggestion('France')"><span class="fi fi-fr"></span> France</button>
     </div>
   </div>
 
@@ -107,6 +119,42 @@
 
   <!-- my javascript -->
   <script src="script.js"></script>
+
+  <!-- full screen intro onboarding -->
+<div id="intro" onclick="handleIntroClick(event)">
+  <div id="intro-overlay"></div>
+  <div id="intro-content">
+    <div id="intro-eyebrow">Victoria &amp; Albert Museum</div>
+    <div id="intro-heading">Explore the<br><em>World Collection</em></div>
+    <div id="intro-body">
+      Over one million artefacts spanning every continent.<br>
+      Click any country on the map to browse objects from<br>
+      the V&amp;A's permanent collection.
+    </div>
+    <button id="intro-cta" onclick="dismissIntro()">
+      Begin exploring
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <span id="intro-skip">Click anywhere to skip</span>
+  </div>
+</div>
+
+<!-- bottom pill reminder -->
+<div id="pill">
+  <div id="pill-icon">
+    <div id="pill-ripple"></div>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 2L4 18L8 14L11 21L14 20L11 13L17 13L4 2Z" fill="white" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div id="pill-text-wrap">
+    <div id="pill-main">Click any country to explore</div>
+    <div id="pill-hint">Drag the map to navigate · scroll to zoom</div>
+  </div>
+  <button id="pill-close" onclick="dismissPill()">✕</button>
+</div>
 
 </body>
 </html>
