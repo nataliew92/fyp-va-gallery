@@ -23,7 +23,7 @@ function dismissPill() {
 // URLs for the V&A API and a variable to control how many results per page
 const API_BASE   = 'https://api.vam.ac.uk/v2/objects/search';
 const IMAGE_BASE = 'https://framemark.vam.ac.uk/collections';
-const PAGE_SIZE  = 50;
+const PAGE_SIZE  = 52; // chosen to fill the grid nicely without leaving gaps when filtering for images only
 
 let activeCountry = null;
 let activeLayer   = null;
@@ -233,7 +233,7 @@ const COUNTRY_FLAGS = {
   'Tuvalu': 'tv',
 };
 
-// functions to open and close the country popup - also added a function to correctly categorise the artefacts by country
+// functions to open and close the country popup and load the relevant data when it's opened
 function openCountryPanel(countryName, preselectCategory) {
   activeCountry = countryName;
   currentPage   = 1;
@@ -323,21 +323,64 @@ function fetchArtefacts(page = 1) {
 
   const category   = inspoOverride?.category || document.getElementById('panel-category').value;
   const imagesOnly = document.getElementById('images-only').checked;
-  const params     = new URLSearchParams();
-
-  params.set('q_place_name', activeCountry);
-  params.set('page_size',    PAGE_SIZE);
-  params.set('page',         currentPage);
-
-  // only filter to images if the checkbox is ticked
-  if (imagesOnly) params.set('image_restrict', '1');
-  if (category)   params.set('id_category', category);
 
   showLoading();
 
+  // if images only is ticked we might need to fetch multiple pages to fill up the grid
+  // because the api returns some records without images even with image_restrict on
+  if (imagesOnly) {
+    fetchWithImages(page, category);
+  } else {
+    // normal single fetch when showing everything
+    const params = new URLSearchParams();
+    params.set('q_place_name', activeCountry);
+    params.set('page_size',    PAGE_SIZE);
+    params.set('page',         currentPage);
+    if (category) params.set('id_category', category);
+
+    fetch(`${API_BASE}?${params}`)
+      .then(r => r.json())
+      .then(renderResults)
+      .catch(() => showError());
+  }
+}
+
+// keeps fetching api pages until we have enough records with images
+// or we've exhausted all available pages
+function fetchWithImages(page, category, collected = [], apiPage = null, totalPages = null) {
+  // first call - work out which api page to start on
+  if (apiPage === null) apiPage = (page - 1) * 2 + 1;
+
+  const params = new URLSearchParams();
+  params.set('q_place_name',   activeCountry);
+  params.set('image_restrict', '1');
+  params.set('page_size',      PAGE_SIZE);
+  params.set('page',           apiPage);
+  if (category) params.set('id_category', category);
+
   fetch(`${API_BASE}?${params}`)
     .then(r => r.json())
-    .then(renderResults)
+    .then(data => {
+      if (totalPages === null) totalPages = data.info.pages;
+
+      // keep only records that actually have an image
+      const withImages = (data.records || []).filter(r => r._primaryImageId);
+      collected = collected.concat(withImages);
+
+      // if we have enough, or we've run out of api pages, render what we have
+      if (collected.length >= PAGE_SIZE || apiPage >= totalPages) {
+        renderResults({
+          records: collected.slice(0, PAGE_SIZE),
+          info: {
+            record_count: data.info.record_count,
+            pages:        Math.max(1, Math.ceil(data.info.record_count / PAGE_SIZE)),
+          },
+        });
+      } else {
+        // otherwise fetch the next page and combine with what we have
+        fetchWithImages(page, category, collected, apiPage + 1, totalPages);
+      }
+    })
     .catch(() => showError());
 }
 
@@ -350,21 +393,6 @@ function renderResults(data) {
 
   // check for empty results before doing anything else
   if (!records || records.length === 0) {
-    document.getElementById('panel-empty').style.display = 'block';
-    document.getElementById('panel-result-count').textContent = '';
-    document.getElementById('panel-pagination').innerHTML = '';
-    return;
-  }
-
-  // if images only is ticked, strip out any records that came back without an image
-  // the API's image_restrict param isn't perfectly reliable so we double check here
-  const imagesOnlyEl = document.getElementById('images-only');
-  if (imagesOnlyEl && imagesOnlyEl.checked) {
-    records = records.filter(item => item._primaryImageId);
-  }
-
-  // check again after filtering in case it removed everything
-  if (records.length === 0) {
     document.getElementById('panel-empty').style.display = 'block';
     document.getElementById('panel-result-count').textContent = '';
     document.getElementById('panel-pagination').innerHTML = '';
