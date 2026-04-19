@@ -52,7 +52,8 @@
           <div id="panel-result-count"></div>
         </div>
         <div id="panel-topbar-right">
-          <select id="panel-category" onchange="fetchArtefacts(1)">
+            <!-- clear the override when the category dropdown is changed manually as there were bugs in previous iteration -->
+            <select id="panel-category" onchange="inspoOverride = null; fetchArtefacts(1);">
             <option value="">All categories</option>
             <option value="THES48904">Ceramics</option>
             <option value="THES49003">Fashion</option>

@@ -156,6 +156,7 @@ function onClick(e) {
   if (activeLayer && activeLayer !== e.target) activeLayer.setStyle({ ...styleDefault });
   e.target.setStyle({ ...styleSelected });
   activeLayer = e.target;
+  inspoOverride = null; // clear any inspiration filters when user clicks a country normally
   openCountryPanel(getName(e.target.feature));
 }
 
@@ -232,6 +233,7 @@ function closeCountryPanel() {
   document.body.classList.remove('panel-open');
   if (activeLayer) { activeLayer.setStyle({ ...styleDefault }); activeLayer = null; }
   activeCountry = null;
+  inspoOverride = null; // make sure filters are cleared when panel closes
 }
 
 // close the popup if user clicks the dark background area outside it
@@ -457,7 +459,7 @@ function pick(type, label, value, extra) {
 
 function discover() {
   const { category, country } = inspoSelections;
-  inspoOverride = null;
+  inspoOverride = null; // reset before setting new filters so nothing carries over
   closeInspo();
   openCountryPanel(country.value, category.label);
 }
