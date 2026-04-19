@@ -625,3 +625,18 @@ document.addEventListener('click', e => {
     closeAllSelectors();
   }
 });
+
+// cycles through the carousel slides on the onboarding screen every few seconds
+const carouselSlides = document.querySelectorAll('.carousel-slide');
+const carouselDots   = document.querySelectorAll('.carousel-dot');
+let carouselIndex    = 0;
+
+if (carouselSlides.length > 0) {
+  setInterval(() => {
+    carouselSlides[carouselIndex].classList.remove('active');
+    carouselDots[carouselIndex].classList.remove('active');
+    carouselIndex = (carouselIndex + 1) % carouselSlides.length;
+    carouselSlides[carouselIndex].classList.add('active');
+    carouselDots[carouselIndex].classList.add('active');
+  }, 3500);
+}
