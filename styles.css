@@ -119,6 +119,11 @@ html, body {
   opacity: 0.4;
 }
 
+/* smooth transition when hovering over countries on the map */
+.leaflet-interactive {
+  transition: fill-opacity 0.3s ease, stroke-opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
 #map-tooltip {
   position: fixed;
   z-index: 900;
@@ -142,7 +147,7 @@ html, body {
 */
 #overlay {
   position: fixed; inset: 0; z-index: 500;
-  background-color: rgba(240,236,230,0.7);
+  background-color: rgba(240,236,230,0.2);
   backdrop-filter: blur(4px);
   display: flex; align-items: center; justify-content: center;
   padding: 1.5rem;
@@ -188,6 +193,24 @@ body.panel-open #panel-card { transform: translateY(0) scale(1); }
 #panel-result-count strong { color: var(--accent); font-weight: 500; }
 
 #panel-topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+#images-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 14px;
+  color: rgba(0,0,0,0.5);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+#images-toggle-wrap input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
 
 #panel-category {
   background-color: white; border: 1px solid rgba(0,0,0,0.12); border-radius: 6px;
@@ -622,18 +645,6 @@ body.panel-open #panel-card { transform: translateY(0) scale(1); }
   background-color: var(--accent-light);
   transform: translateY(-2px);
 }
-
-#intro-skip {
-  display: block;
-  margin-top: 1.25rem;
-  font-size: 14px;
-  color: white;
-  cursor: pointer;
-  transition: color 0.15s;
-  animation: rise 0.6s 0.8s both;
-}
-
-#intro-skip:hover { color: rgba(255,255,255,0.5); }
 
 @keyframes rise {
   from { opacity: 0; transform: translateY(14px); }

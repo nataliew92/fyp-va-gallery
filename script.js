@@ -12,8 +12,7 @@ function dismissIntro() {
 function handleIntroClick(e) {
   // only dismiss if clicking the background, not the button
   if (e.target === document.getElementById('intro') ||
-      e.target === document.getElementById('intro-overlay') ||
-      e.target === document.getElementById('intro-skip')) {
+      e.target === document.getElementById('intro-overlay')) {
     dismissIntro();
   }
 }
@@ -32,7 +31,7 @@ function dismissPill() {
 // URLs for the V&A API and a variable to control how many results per page
 const API_BASE   = 'https://api.vam.ac.uk/v2/objects/search';
 const IMAGE_BASE = 'https://framemark.vam.ac.uk/collections';
-const PAGE_SIZE  = 20;
+const PAGE_SIZE  = 50;
 
 let activeCountry = null;
 let activeLayer   = null;
@@ -246,16 +245,17 @@ function fetchArtefacts(page = 1) {
   if (!activeCountry) return;
   currentPage = page;
 
-  const category = inspoOverride?.category || document.getElementById('panel-category').value;
-  const keyword  = inspoOverride?.keyword  || '';
-  const params   = new URLSearchParams();
+  const category   = inspoOverride?.category || document.getElementById('panel-category').value;
+  const imagesOnly = document.getElementById('images-only').checked;
+  const params     = new URLSearchParams();
 
-  params.set('q_place_name',   activeCountry);
-  params.set('image_restrict', '1');
-  params.set('page_size',      PAGE_SIZE);
-  params.set('page',           currentPage);
-  if (category) params.set('id_category', category);
-  if (keyword)  params.set('q', keyword);
+  params.set('q_place_name', activeCountry);
+  params.set('page_size',    PAGE_SIZE);
+  params.set('page',         currentPage);
+
+  // only filter to images if the checkbox is ticked
+  if (imagesOnly) params.set('image_restrict', '1');
+  if (category)   params.set('id_category', category);
 
   showLoading();
 
@@ -266,13 +266,29 @@ function fetchArtefacts(page = 1) {
 }
 
 function renderResults(data) {
-  const records    = data.records;
+  let records      = data.records;
   const totalCount = data.info.record_count;
   const totalPages = data.info.pages;
 
   hideLoading();
 
+  // check for empty results before doing anything else
   if (!records || records.length === 0) {
+    document.getElementById('panel-empty').style.display = 'block';
+    document.getElementById('panel-result-count').textContent = '';
+    document.getElementById('panel-pagination').innerHTML = '';
+    return;
+  }
+
+  // if images only is ticked, strip out any records that came back without an image
+  // the API's image_restrict param isn't perfectly reliable so we double check here
+  const imagesOnlyEl = document.getElementById('images-only');
+  if (imagesOnlyEl && imagesOnlyEl.checked) {
+    records = records.filter(item => item._primaryImageId);
+  }
+
+  // check again after filtering in case it removed everything
+  if (records.length === 0) {
     document.getElementById('panel-empty').style.display = 'block';
     document.getElementById('panel-result-count').textContent = '';
     document.getElementById('panel-pagination').innerHTML = '';
