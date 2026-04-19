@@ -741,7 +741,7 @@ body.panel-open #panel-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: default;
   background-image: url('images/2023NP7023.jpg');
   background-size: cover;
   background-position: center;

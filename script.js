@@ -9,14 +9,6 @@ function dismissIntro() {
   }, 500);
 }
 
-function handleIntroClick(e) {
-  // only dismiss if clicking the background, not the button
-  if (e.target === document.getElementById('intro') ||
-      e.target === document.getElementById('intro-overlay')) {
-    dismissIntro();
-  }
-}
-
 function showPill() {
   const pill = document.getElementById('pill');
   pill.classList.add('visible');
