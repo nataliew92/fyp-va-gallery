@@ -26,7 +26,11 @@ html, body {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  background-color: var(--accent);
+  background: 
+    linear-gradient(90deg, rgba(21,67,96,0.85), rgba(26,82,118,0.85)),
+    url('images/2023NP6153.jpg') center/cover no-repeat;
+  backdrop-filter: blur(14px);
+  border-bottom: 2px solid var(--accent-light);
   height: 70px;
   padding: 0 1.5rem;
   display: flex;
@@ -194,7 +198,9 @@ body.panel-open #panel-card {
   gap: 0.75rem;
   flex-shrink: 0;
   flex-wrap: nowrap;
-  background: linear-gradient(90deg, rgba(21,67,96,0.92), rgba(26,82,118,0.92));
+  background: 
+    linear-gradient(90deg, rgba(21,67,96,0.85), rgba(26,82,118,0.85)),
+    url('images/2023NP6153.jpg') center/cover no-repeat;
   backdrop-filter: blur(14px);
   border-radius: 18px 18px 0 0;
 }
@@ -940,16 +946,16 @@ body.panel-open #panel-card {
   width: 80px;
   height: 80px;
   padding: 0;
-  background-color: rgba(26,82,118,0.55);
+  background: rgba(26,82,118,0.75);
   backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(160,207,238,0.4);
+  border: 1.5px solid var(--accent-light);
   border-radius: 50%;
   font-family: 'Lato', sans-serif;
   font-size: 11px;
   line-height: 1.3;
   color: white;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s, transform 0.15s;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -957,6 +963,28 @@ body.panel-open #panel-card {
   gap: 0.3rem;
   z-index: 1001;
   text-align: center;
+  box-shadow: 0 4px 16px rgba(26,82,118,0.5);
+}
+
+#inspo-trigger::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(160,207,238,0.5);
+  animation: trigger-pulse 2.5s ease-out infinite;
+}
+
+@keyframes trigger-pulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  70%  { transform: scale(1.2); opacity: 0; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+#inspo-trigger:hover {
+  background: rgba(26,82,118,0.92);
+  border-color: white;
+  transform: scale(1.05);
 }
 
 #inspo-trigger:hover {
