@@ -19,9 +19,8 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <!-- header -->
-  <div id="header">
+  <header id="header">
     <div id="header-left">
       <h1>V&amp;A <em>World Collection</em></h1>
       <p>Click any country to explore the collection</p>
@@ -35,16 +34,18 @@
       <button class="suggestion-chip" onclick="openSuggestion('Egypt')"><span class="fi fi-eg"></span> Egypt</button>
       <button class="suggestion-chip" onclick="openSuggestion('France')"><span class="fi fi-fr"></span> France</button>
     </div>
-  </div>
+  </header>
 
   <!-- the map goes here, leaflet fills this div -->
-  <div id="map"></div>
-  <div id="map-tooltip"></div>
-  <div id="hint">← <span>Click any country</span> to browse artefacts →</div>
+  <main>
+    <div id="map" role="application" aria-label="Interactive world map"></div>
+    <div id="map-tooltip" role="tooltip"></div>
+    <div id="hint" aria-hidden="true">← <span>Click any country</span> to browse artefacts →</div>
+  </main>
 
-<!-- popup that appears when you click a country -->
-  <div id="overlay" onclick="handleOverlayClick(event)">
-    <div id="panel-card">
+  <!-- popup that appears when you click a country -->
+  <div id="overlay" onclick="handleOverlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="panel-country-name">
+    <article id="panel-card">
       <div id="panel-topbar">
         <div id="panel-topbar-left">
           <!-- back button closes the panel and returns the user to the map -->
@@ -80,8 +81,7 @@
           <button id="panel-close-btn" onclick="closeCountryPanel()">✕</button>
         </div>
       </div>
-
-      <div id="panel-body">
+      <section id="panel-body">
         <div id="panel-loading"><div class="spinner"></div><p>Searching the collection…</p></div>
         <!-- shown when the api comes back with nothing for the selected filters -->
         <div id="panel-empty">
@@ -96,14 +96,14 @@
         <div id="panel-error">Could not reach the V&amp;A API. Check your connection.</div>
         <div id="panel-grid"></div>
         <div id="panel-pagination"></div>
-      </div>
-
-    </div>
+      </section>
+    </article>
   </div>
 
   <!-- second popup for when you click an individual artefact card -->
-  <div id="detail-overlay" onclick="handleDetailOverlayClick(event)">
-    <div id="detail-card">
+<div id="detail-overlay" onclick="handleDetailOverlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+  <article id="detail-card">
+    
       <div id="detail-top">
         <div id="detail-image-wrap"></div>
         <div id="detail-info">
@@ -134,11 +134,12 @@
           View full record on V&amp;A ↗
         </a>
       </div>
-    </div>
+
+    </article>
   </div>
 
   <!-- full screen intro onboarding -->
-  <div id="intro">
+  <div id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-heading">
     <div id="intro-overlay"></div>
     <div id="intro-content">
       <div id="intro-eyebrow">Victoria &amp; Albert Museum</div>
@@ -158,7 +159,7 @@
   </div>
 
   <!-- bottom pill reminder -->
-  <div id="pill">
+  <aside id="pill" role="status" aria-live="polite">
     <div id="pill-icon">
       <div id="pill-ripple"></div>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,7 +171,7 @@
       <div id="pill-hint">Drag the map to navigate · scroll to zoom</div>
     </div>
     <button id="pill-close" onclick="dismissPill()">✕</button>
-  </div>
+  </aside>
 
   <!-- inspiration menu -->
   <button id="inspo-trigger" onclick="openInspo()">
@@ -179,15 +180,13 @@
   </button>
 
   <div id="inspo-overlay" onclick="closeInspo()"></div>
-
-  <div id="inspo-panel">
-
+  <section id="inspo-panel" role="dialog" aria-modal="true" aria-labelledby="inspo-heading">
     <button id="inspo-close" onclick="closeInspo()">✕</button>
-
     <div id="inspo-heading">
       <span class="heading-globe">🌍</span>
       Need some inspiration?
     </div>
+    
     <div id="inspo-sub">Pick an option from each box & we'll find something for you</div>
 
     <div id="inspo-sentence">
@@ -235,7 +234,6 @@
           <div class="inspo-option" onclick="pick('country','Korea','Korea','kr')"><span class="fi fi-kr"></span>Korea</div>
         </div>
       </div>
-
     </div>
 
     <button id="inspo-discover" onclick="discover()">
@@ -248,7 +246,7 @@
       <span class="shuffle-icon">✦</span> Surprise me
     </button>
 
-  </div>
+  </section>
 
   <!-- leaflet map library js - has to load before my script.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
