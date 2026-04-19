@@ -164,20 +164,104 @@ map.on('click', () => closeCountryPanel());
 // stores any active inspiration filters
 let inspoOverride = null;
 
+// maps country names to their two letter flag icon codes
+const COUNTRY_FLAGS = {
+  // europe
+  'England': 'gb-eng', 'Scotland': 'gb-sct', 'Wales': 'gb-wls',
+  'France': 'fr', 'Germany': 'de', 'Italy': 'it', 'Spain': 'es',
+  'Portugal': 'pt', 'Netherlands': 'nl', 'Belgium': 'be',
+  'Switzerland': 'ch', 'Austria': 'at', 'Poland': 'pl',
+  'Sweden': 'se', 'Norway': 'no', 'Denmark': 'dk', 'Finland': 'fi',
+  'Iceland': 'is', 'Ireland': 'ie', 'Greece': 'gr', 'Turkey': 'tr',
+  'Russia': 'ru', 'Ukraine': 'ua', 'Belarus': 'by', 'Moldova': 'md',
+  'Romania': 'ro', 'Bulgaria': 'bg', 'Serbia': 'rs', 'Croatia': 'hr',
+  'Slovenia': 'si', 'Bosnia and Herz.': 'ba', 'Montenegro': 'me',
+  'Albania': 'al', 'North Macedonia': 'mk', 'Kosovo': 'xk',
+  'Hungary': 'hu', 'Czech Republic': 'cz', 'Slovakia': 'sk',
+  'Lithuania': 'lt', 'Latvia': 'lv', 'Estonia': 'ee',
+  'Luxembourg': 'lu', 'Monaco': 'mc', 'Andorra': 'ad',
+  'Malta': 'mt', 'Cyprus': 'cy', 'Liechtenstein': 'li',
+  'San Marino': 'sm', 'Vatican': 'va',
+
+  // middle east
+  'Iran': 'ir', 'Iraq': 'iq', 'Syria': 'sy', 'Lebanon': 'lb',
+  'Jordan': 'jo', 'Israel': 'il', 'Palestine': 'ps',
+  'Saudi Arabia': 'sa', 'Yemen': 'ye', 'Oman': 'om',
+  'United Arab Emirates': 'ae', 'Qatar': 'qa', 'Bahrain': 'bh',
+  'Kuwait': 'kw',
+
+  // asia
+  'Japan': 'jp', 'China': 'cn', 'India': 'in', 'Korea': 'kr',
+  'Vietnam': 'vn', 'Thailand': 'th', 'Indonesia': 'id',
+  'Malaysia': 'my', 'Philippines': 'ph', 'Singapore': 'sg',
+  'Myanmar': 'mm', 'Burma': 'mm', 'Cambodia': 'kh', 'Laos': 'la',
+  'Nepal': 'np', 'Sri Lanka': 'lk', 'Pakistan': 'pk',
+  'Afghanistan': 'af', 'Bangladesh': 'bd', 'Bhutan': 'bt',
+  'Maldives': 'mv', 'Mongolia': 'mn', 'Taiwan': 'tw',
+  'Timor-Leste': 'tl', 'Brunei': 'bn',
+  'North Korea': 'kp', 'Uzbekistan': 'uz', 'Kazakhstan': 'kz',
+  'Turkmenistan': 'tm', 'Tajikistan': 'tj', 'Kyrgyzstan': 'kg',
+  'Azerbaijan': 'az', 'Armenia': 'am', 'Georgia': 'ge', 'South Korea': 'kr',
+
+  // africa
+  'Egypt': 'eg', 'Morocco': 'ma', 'Algeria': 'dz', 'Tunisia': 'tn',
+  'Libya': 'ly', 'Sudan': 'sd', 'South Sudan': 'ss', 'Ethiopia': 'et',
+  'Eritrea': 'er', 'Djibouti': 'dj', 'Somalia': 'so', 'Kenya': 'ke',
+  'Uganda': 'ug', 'Tanzania': 'tz', 'Rwanda': 'rw', 'Burundi': 'bi',
+  'Nigeria': 'ng', 'Ghana': 'gh', 'Senegal': 'sn', 'Mali': 'ml',
+  'Niger': 'ne', 'Chad': 'td', 'Cameroon': 'cm', 'Ivory Coast': 'ci',
+  'Burkina Faso': 'bf', 'Guinea': 'gn', 'Guinea-Bissau': 'gw',
+  'Sierra Leone': 'sl', 'Liberia': 'lr', 'Togo': 'tg', 'Benin': 'bj',
+  'Mauritania': 'mr', 'Gambia': 'gm', 'Cape Verde': 'cv',
+  'Congo': 'cd', 'Central African Republic': 'cf', 'Gabon': 'ga',
+  'Equatorial Guinea': 'gq', 'São Tomé and Príncipe': 'st',
+  'Angola': 'ao', 'Zambia': 'zm', 'Zimbabwe': 'zw', 'Mozambique': 'mz',
+  'Malawi': 'mw', 'Madagascar': 'mg', 'Namibia': 'na', 'Botswana': 'bw',
+  'South Africa': 'za', 'Lesotho': 'ls', 'Swaziland': 'sz',
+  'Eswatini': 'sz', 'Mauritius': 'mu', 'Seychelles': 'sc',
+  'Comoros': 'km',
+
+  // americas
+  'United States': 'us', 'Canada': 'ca', 'Mexico': 'mx',
+  'Guatemala': 'gt', 'Belize': 'bz', 'Honduras': 'hn',
+  'El Salvador': 'sv', 'Nicaragua': 'ni', 'Costa Rica': 'cr',
+  'Panama': 'pa', 'Cuba': 'cu', 'Jamaica': 'jm', 'Haiti': 'ht',
+  'Dominican Republic': 'do', 'Puerto Rico': 'pr',
+  'Trinidad and Tobago': 'tt', 'Barbados': 'bb', 'Bahamas': 'bs',
+  'Colombia': 'co', 'Venezuela': 've', 'Guyana': 'gy',
+  'Suriname': 'sr', 'Ecuador': 'ec', 'Peru': 'pe', 'Bolivia': 'bo',
+  'Brazil': 'br', 'Paraguay': 'py', 'Uruguay': 'uy', 'Argentina': 'ar',
+  'Chile': 'cl', 'Greenland': 'gl',
+
+  // oceania
+  'Australia': 'au', 'New Zealand': 'nz', 'Papua New Guinea': 'pg',
+  'Fiji': 'fj', 'Solomon Islands': 'sb', 'Vanuatu': 'vu',
+  'Samoa': 'ws', 'Tonga': 'to', 'Kiribati': 'ki', 'Palau': 'pw',
+  'Marshall Islands': 'mh', 'Micronesia': 'fm', 'Nauru': 'nr',
+  'Tuvalu': 'tv',
+};
+
 // functions to open and close the country popup - also added a function to correctly categorise the artefacts by country
 function openCountryPanel(countryName, preselectCategory) {
   activeCountry = countryName;
   currentPage   = 1;
   document.getElementById('panel-country-name').textContent = countryName;
   document.getElementById('panel-result-count').textContent = '';
+
+  // inject the country flag if we have a code for it
+  const flagEl  = document.getElementById('panel-country-flag');
+  const flagCode = COUNTRY_FLAGS[countryName];
+  if (flagCode) {
+    flagEl.className = `fi fi-${flagCode}`;
+  } else {
+    flagEl.className = '';
+  }
+
   document.body.classList.add('panel-open');
 
   if (preselectCategory) {
-    // if coming from inspiration menu, let loadCategories
-    // handle the first fetch once it has the real category ID
     loadCategories(countryName, preselectCategory);
   } else {
-    // normal country click - load categories and fetch straight away
     loadCategories(countryName);
     fetchArtefacts(1);
   }

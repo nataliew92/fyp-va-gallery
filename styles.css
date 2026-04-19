@@ -155,7 +155,15 @@ html, body {
   transition: opacity 0.3s;
 }
 
-body.panel-open #overlay { opacity: 1; pointer-events: all; }
+body.panel-open #overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* hide the inspiration button when the country panel is open so it doesn't cover it */
+body.panel-open #inspo-trigger {
+  display: none;
+}
 
 #panel-card {
   background-color: #faf8f5;
@@ -172,75 +180,215 @@ body.panel-open #overlay { opacity: 1; pointer-events: all; }
   overflow: hidden;
 }
 
-body.panel-open #panel-card { transform: translateY(0) scale(1); }
+body.panel-open #panel-card {
+  transform: translateY(0) scale(1);
+}
 
-/* top bar inside the popup - has the country name, category filter and close button */
+/* top bar inside the popup - navy gradient to match the header */
 #panel-topbar {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem; flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  background: linear-gradient(90deg, rgba(21,67,96,0.92), rgba(26,82,118,0.92));
+  backdrop-filter: blur(14px);
+  border-radius: 18px 18px 0 0;
 }
 
-#panel-topbar-left { display: flex; align-items: baseline; gap: 0.75rem; }
+#panel-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
 
+#panel-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* country name now in white to sit on the dark topbar */
 #panel-country-name {
   font-family: 'Lora', serif;
-  font-size: 1.4rem; font-weight: 500; color: #1a1714;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
-#panel-result-count { font-size: 12px; color: rgba(0,0,0,0.4); }
-#panel-result-count strong { color: var(--accent); font-weight: 500; }
+#panel-result-count {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-#panel-topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+#panel-result-count strong {
+  color: var(--accent-light);
+  font-weight: 500;
+}
 
+/* flag icon next to the country name */
+#panel-country-flag {
+  width: 1.4em;
+  height: 1.05em;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* back button styled for the dark topbar */
+#panel-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  color: white !important;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+#panel-back-btn:hover {
+  color: var(--accent-light) !important;
+}
+
+/* close button updated for dark background */
+#panel-close-btn {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--accent);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s; flex-shrink: 0;
+}
+
+#panel-close-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* category dropdown updated for dark topbar */
+#panel-category {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  padding: 0.4rem 0.75rem;
+  appearance: none;
+  cursor: pointer;
+  min-width: 120px;
+  max-width: 160px;
+  transition: border-color 0.15s;
+}
+
+#panel-category:focus {
+  outline: none;
+  border-color: var(--accent-light);
+}
+
+/* images toggle label updated for dark topbar */
 #images-toggle-wrap {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 14px;
-  color: rgba(0,0,0,0.5);
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
 }
 
 #images-toggle-wrap input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent-light);
   cursor: pointer;
 }
 
 #panel-category {
-  background-color: white; border: 1px solid rgba(0,0,0,0.12); border-radius: 6px;
-  color: #1a1714; font-family: 'Lato', sans-serif; font-size: 13px;
-  padding: 0.4rem 0.75rem; appearance: none; cursor: pointer; min-width: 160px;
+  background-color: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 6px;
+  color: #1a1714;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  padding: 0.4rem 0.75rem;
+  appearance: none;
+  cursor: pointer;
+  min-width: 160px;
   transition: border-color 0.15s;
 }
 
-#panel-category:focus { outline: none; border-color: var(--accent); }
-
-#panel-close-btn {
-  background-color: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);
-  color: rgba(0,0,0,0.4); width: 32px; height: 32px; border-radius: 50%;
-  font-size: 15px; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; transition: all 0.15s; flex-shrink: 0;
+#panel-category:focus {
+  outline: none;
+  border-color: var(--accent);
 }
-
-#panel-close-btn:hover { background-color: rgba(0,0,0,0.1); color: #1a1714; }
 
 /* the scrollable area where all the artefact cards appear */
 #panel-body {
-  flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem;
+  flex: 1; overflow-y: auto; 
+  padding: 1.25rem 1.5rem;
   scroll-behavior: smooth;
 }
 
-#panel-body::-webkit-scrollbar { width: 5px; }
-#panel-body::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.12); border-radius: 3px; }
+#panel-body::-webkit-scrollbar {
+  width: 5px;
+}
+#panel-body::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.12);
+  border-radius: 3px;
+}
 
 #panel-loading {
-  display: none; text-align: center; padding: 4rem 1rem; color: rgba(0,0,0,0.3);
+  display: none;
+  text-align: center;
+  padding: 4rem 1rem;
+  color: rgba(0,0,0,0.3);
+}
+
+/* back button in the top left of the panel - closes it and goes back to the map */
+#panel-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  color: rgba(0,0,0,0.35);
+  cursor: pointer;
+  padding: 0.2rem 0;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+/* turns navy on hover to match the rest of the site */
+#panel-back-btn:hover {
+  color: var(--accent);
 }
 
 .spinner {
@@ -252,7 +400,35 @@ body.panel-open #panel-card { transform: translateY(0) scale(1); }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-#panel-empty, #panel-error {
+/* shown when nothing comes back from the api for the chosen filters */
+#panel-empty {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+/* the magnifying glass svg icon */
+#panel-empty svg {
+  margin-bottom: 1rem;
+}
+
+/* main message */
+#panel-empty p {
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  color: black;
+  margin-bottom: 0.4rem;
+}
+
+/* smaller hint underneath telling them what to try */
+#panel-empty span {
+  font-size: 12px;
+  color: black;
+  font-weight: 300;
+}
+
+/* api error message - separate from empty so we can style them differently if needed */
+#panel-error {
   display: none; text-align: center; padding: 3rem 1rem;
   color: rgba(0,0,0,0.35); font-size: 13px; font-style: italic;
 }
@@ -288,9 +464,9 @@ body.panel-open #panel-card { transform: translateY(0) scale(1); }
 }
 
 .card-title {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.4;
   margin-bottom: 3px;
   color: #1a1714;
   overflow: hidden;
@@ -301,18 +477,19 @@ body.panel-open #panel-card { transform: translateY(0) scale(1); }
 }
 
 .card-date {
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(0,0,0,0.4);
 }
 
 .card-place-badge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 12px;
   background-color: rgba(26,82,118,0.1);
   color: var(--accent);
   border-radius: 3px;
   padding: 1px 6px;
-  margin-bottom: 4px; }
+  margin-bottom: 4px;
+}
 
 
 /* next/prev page buttons at the bottom */

@@ -45,9 +45,17 @@
 <!-- popup that appears when you click a country -->
   <div id="overlay" onclick="handleOverlayClick(event)">
     <div id="panel-card">
-
       <div id="panel-topbar">
         <div id="panel-topbar-left">
+          <!-- back button closes the panel and returns the user to the map -->
+          <button id="panel-back-btn" onclick="closeCountryPanel()" title="Back to map">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Back
+          </button>
+          <!-- flag gets injected here by javascript when a country is opened -->
+          <span id="panel-country-flag"></span>
           <div id="panel-country-name"></div>
           <div id="panel-result-count"></div>
         </div>
@@ -75,7 +83,16 @@
 
       <div id="panel-body">
         <div id="panel-loading"><div class="spinner"></div><p>Searching the collection…</p></div>
-        <div id="panel-empty">No artefacts found for this selection.</div>
+        <!-- shown when the api comes back with nothing for the selected filters -->
+        <div id="panel-empty">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="28" cy="28" r="18" stroke="rgba(0,0,0,0.12)" stroke-width="2.5"/>
+            <path d="M41 41L52 52" stroke="rgba(0,0,0,0.12)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M22 28h12M28 22v12" stroke="rgba(0,0,0,0.1)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <p>Nothing found for this selection.</p>
+          <span>Try a different category or untick "Images only"</span>
+        </div>
         <div id="panel-error">Could not reach the V&amp;A API. Check your connection.</div>
         <div id="panel-grid"></div>
         <div id="panel-pagination"></div>
