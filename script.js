@@ -626,17 +626,44 @@ document.addEventListener('click', e => {
   }
 });
 
-// cycles through the carousel slides on the onboarding screen every few seconds
+// carousel on the onboarding - auto-advances every few seconds but user can also click arrows or dots
 const carouselSlides = document.querySelectorAll('.carousel-slide');
 const carouselDots   = document.querySelectorAll('.carousel-dot');
 let carouselIndex    = 0;
+let carouselTimer    = null;
+
+// switch to a specific slide
+function carouselShow(i) {
+  carouselSlides[carouselIndex].classList.remove('active');
+  carouselDots[carouselIndex].classList.remove('active');
+  carouselIndex = (i + carouselSlides.length) % carouselSlides.length;
+  carouselSlides[carouselIndex].classList.add('active');
+  carouselDots[carouselIndex].classList.add('active');
+}
+
+// step forward or backward by amount (1 or -1)
+function carouselGo(amount) {
+  carouselShow(carouselIndex + amount);
+  restartCarouselTimer();
+}
+
+// jump straight to a specific slide when a dot is clicked
+function carouselJump(i) {
+  carouselShow(i);
+  restartCarouselTimer();
+}
+
+// reset the auto-advance timer after any manual interaction
+// otherwise the carousel might tick over right after the user clicks
+function restartCarouselTimer() {
+  clearInterval(carouselTimer);
+  startCarouselTimer();
+}
+
+function startCarouselTimer() {
+  carouselTimer = setInterval(() => carouselShow(carouselIndex + 1), 3500);
+}
 
 if (carouselSlides.length > 0) {
-  setInterval(() => {
-    carouselSlides[carouselIndex].classList.remove('active');
-    carouselDots[carouselIndex].classList.remove('active');
-    carouselIndex = (carouselIndex + 1) % carouselSlides.length;
-    carouselSlides[carouselIndex].classList.add('active');
-    carouselDots[carouselIndex].classList.add('active');
-  }, 3500);
+  startCarouselTimer();
 }

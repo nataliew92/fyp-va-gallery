@@ -938,28 +938,37 @@ body.panel-open #panel-card {
   text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
-/* progress dots in the bottom right */
-.carousel-dots {
-  position: absolute;
-  bottom: 0.6rem;
-  right: 0.9rem;
-  display: flex;
-  gap: 4px;
-  z-index: 3;
+/* bigger more clickable dots at the bottom */
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transition: background 0.3s, width 0.3s;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-.carousel-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  transition: background 0.3s, width 0.3s;
+.carousel-dot:hover {
+  background: rgba(255,255,255,0.7);
 }
 
 .carousel-dot.active {
   background: white;
-  width: 14px;
-  border-radius: 3px;
+  width: 22px;
+  border-radius: 4px;
+}
+
+/* make the dot row itself a bit taller so the dots aren't cramped */
+.carousel-dots {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.9rem;
+  display: flex;
+  gap: 6px;
+  z-index: 3;
+  align-items: center;
 }
 
 /* bottom pill */

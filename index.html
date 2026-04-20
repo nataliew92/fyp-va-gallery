@@ -155,37 +155,39 @@
         </span>
         <br>the collection
       </div>
-      <!-- carousel showing sample artefacts pulled from the v&a api -->
-      <div id="intro-carousel">
+      
+  <!-- carousel showing sample artefacts pulled from the v&a api -->
+  <div id="intro-carousel">
 
-        <div class="carousel-slide active"
-             style="background-image: url('images/2011FB4099.jpg');">
-        <div class="carousel-caption">"St. Mary Magdalen", Statuette, France</div>
-        </div>
+    <div class="carousel-slide active"
+        style="background-image: url('images/2011FB4099.jpg');">
+      <div class="carousel-caption">"St. Mary Magdalen", Statuette, France</div>
+    </div>
 
-        <div class="carousel-slide"
-            style="background-image: url('images/2024NX3083.jpg');">
-          <div class="carousel-caption">"Thirty-Six Views of Mount Fuji", Woodblock Print, Japan</div>
-        </div>
+    <div class="carousel-slide"
+        style="background-image: url('images/2024NX3083.jpg');">
+      <div class="carousel-caption">"Thirty-Six Views of Mount Fuji", Woodblock Print, Japan</div>
+    </div>
 
-        <div class="carousel-slide"
-            style="background-image: url('images/2006BK4653.jpg');">
-          <div class="carousel-caption">"Porte de la Vierge", Arcading, France</div>
-        </div>
+    <div class="carousel-slide"
+        style="background-image: url('images/2006BK4653.jpg');">
+      <div class="carousel-caption">"Porte de la Vierge", Arcading, France</div>
+    </div>
 
-        <div class="carousel-slide"
-            style="background-image: url('images/2010DY9750.jpg');">
-          <div class="carousel-caption">"The Miracle of Zaandam", Cup and Saucer, China</div>
-        </div>
+    <div class="carousel-slide"
+        style="background-image: url('images/2010DY9750.jpg');">
+      <div class="carousel-caption">"The Miracle of Zaandam", Cup and Saucer, China</div>
+    </div>
 
-        <div class="carousel-dots">
-          <span class="carousel-dot active"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
-          <span class="carousel-dot"></span>
-        </div>
+    <!-- clickable dots to jump to a specific image -->
+    <div class="carousel-dots">
+      <button class="carousel-dot active" onclick="carouselJump(0)" aria-label="Go to image 1"></button>
+      <button class="carousel-dot" onclick="carouselJump(1)" aria-label="Go to image 2"></button>
+      <button class="carousel-dot" onclick="carouselJump(2)" aria-label="Go to image 3"></button>
+      <button class="carousel-dot" onclick="carouselJump(3)" aria-label="Go to image 4"></button>
+    </div>
 
-      </div>
+  </div>
 
       <!-- stats strip showing the scale of the collection -->
       <div id="intro-stats">
