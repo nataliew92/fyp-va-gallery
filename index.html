@@ -22,8 +22,8 @@
   <!-- header -->
   <header id="header">
     <div id="header-left">
-      <h1>V&amp;A <em>World Collection</em></h1>
-      <p>Click any country to explore the collection</p>
+      <h1>V&amp;A<span class="title-spark">✦</span><em>World Collection</em></h1>
+      <p>Explore the collection through place</p>
     </div>
     <div id="header-suggestions">
       <span id="header-suggestions-label">Start exploring →</span>
@@ -142,19 +142,30 @@
   <div id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-heading">
     <div id="intro-overlay"></div>
     <div id="intro-content">
-      <div id="intro-eyebrow">Victoria &amp; Albert Museum</div>
-      <div id="intro-heading">Explore the<br><em>World Collection</em></div>
+      <!-- museum branding at the top -->
+      <div id="museum-label">Victoria &amp; Albert Museum</div>
+      <!-- commented out for now, not sure if i like how it looks, may add it back later
+       <div id="intro-eyebrow">Explore by place, not by search</div> -->
+      <div id="intro-heading">
+        <span class="heading-key"> <!-- SVG for the animation on the heading Explore text -->
+          Explore
+          <svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M 4 10 C 40 4, 90 14, 130 8 S 185 4, 196 10"/>
+          </svg>
+        </span>
+        <br>the collection
+      </div>
       <!-- carousel showing sample artefacts pulled from the v&a api -->
       <div id="intro-carousel">
 
         <div class="carousel-slide active"
-             style="background-image: url('images/2010EG9178.jpg');">
-        <div class="carousel-caption">"Portrait of Hortense Mancini", Enamel Miniature, France</div>
+             style="background-image: url('images/2011FB4099.jpg');">
+        <div class="carousel-caption">"St. Mary Magdalen", Statuette, France</div>
         </div>
 
         <div class="carousel-slide"
-            style="background-image: url('images/2006AM7417.jpg');">
-          <div class="carousel-caption">"Success to the British Fisheries", Plaque, Birmingham</div>
+            style="background-image: url('images/2024NX3083.jpg');">
+          <div class="carousel-caption">"Thirty-Six Views of Mount Fuji", Woodblock Print, Japan</div>
         </div>
 
         <div class="carousel-slide"
@@ -175,10 +186,30 @@
         </div>
 
       </div>
+
+      <!-- stats strip showing the scale of the collection -->
+      <div id="intro-stats">
+        <div class="intro-stat">
+          <div class="intro-stat-number">2.3M</div>
+          <div class="intro-stat-label">Objects</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="intro-stat">
+          <div class="intro-stat-number">180+</div>
+          <div class="intro-stat-label">Countries</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="intro-stat">
+          <div class="intro-stat-number">5,000</div>
+          <div class="intro-stat-label">Years</div>
+        </div>
+      </div>
+
+      <!-- small decorative divider before the description -->
+      <div id="intro-divider">✦</div>
+
       <div id="intro-body">
-        Over one million artefacts spanning every continent.<br>
-        Click any country on the map to browse objects from<br>
-        the V&amp;A's permanent collection.
+        A different way to browse the V&A, led by curiosity rather than keywords. Click any country to see what's there, or let us surprise you.
       </div>
       <button id="intro-cta" onclick="dismissIntro()">
         Begin exploring
