@@ -131,15 +131,75 @@ function getName(feature) {
   return normaliseName(feature.properties.ADMIN || feature.properties.name || 'Unknown');
 }
 
+// caches artefact counts so we only hit the api once per country
+const countryCountCache = {};
+
+// fetches the artefact count for a country and updates the tooltip if still showing that country
+function fetchCountryCount(countryName, targetEl) {
+  // if we already have it cached, just render it
+  if (countryCountCache[countryName] !== undefined) {
+    renderCount(targetEl, countryCountCache[countryName], countryName);
+    return;
+  }
+
+  const url = `${API_BASE}?q_place_name=${encodeURIComponent(countryName)}&page_size=1`;
+
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      const count = data.info.record_count;
+      countryCountCache[countryName] = count;
+      renderCount(targetEl, count, countryName);
+    })
+    .catch(() => {
+      countryCountCache[countryName] = null;
+      renderCount(targetEl, null, countryName);
+    });
+}
+
+// actually writes the count text into the tooltip element
+// only updates if the tooltip is still showing the same country the request was made for
+function renderCount(el, count, expectedCountry) {
+  if (!el || el.dataset.country !== expectedCountry) return;
+
+  el.classList.remove('loading');
+  if (count === null) {
+    el.textContent = 'Click to explore';
+  } else {
+    const rounded = Math.round(count / 100) * 100;
+    el.textContent = rounded > 0 ? `~${rounded.toLocaleString()} artefacts` : 'Click to explore';
+  }
+}
+
 function onHover(e) {
   if (e.target !== activeLayer) e.target.setStyle({ ...styleHover });
-  tooltip.textContent = getName(e.target.feature);
-  tooltip.style.display = 'block';
+
+  const countryName = getName(e.target.feature);
+  const flagCode    = COUNTRY_FLAGS[countryName];
+
+  // build up the rich tooltip content
+  const flagHtml = flagCode
+    ? `<span class="tooltip-flag" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/flags/4x3/${flagCode}.svg');"></span>`
+    : '';
+
+  tooltip.innerHTML = `
+    ${flagHtml}
+    <span class="tooltip-text">
+      <span class="tooltip-name">${countryName}</span>
+      <span class="tooltip-count loading" data-country="${countryName}">Loading…</span>
+    </span>
+  `;
+
+  tooltip.classList.add('visible');
+
+  // fetch the count (cached after first lookup per country)
+  const countEl = tooltip.querySelector('.tooltip-count');
+  fetchCountryCount(countryName, countEl);
 }
 
 function onOut(e) {
   if (e.target !== activeLayer) e.target.setStyle({ ...styleDefault });
-  tooltip.style.display = 'none';
+  tooltip.classList.remove('visible');
 }
 
 function onClick(e) {

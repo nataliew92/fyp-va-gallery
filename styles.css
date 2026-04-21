@@ -195,21 +195,83 @@ body::before {
   transition: fill-opacity 0.3s ease, stroke-opacity 0.3s ease, stroke-width 0.3s ease;
 }
 
+/* styled tooltip that follows the cursor when hovering over a country */
 #map-tooltip {
   position: fixed;
   z-index: 900;
-  background-color: rgba(250,248,245,0.95);
-  border: 1px solid rgba(0,0,0,0.12);
-  color: #1a1714;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 5px 10px;
-  border-radius: 6px;
+  background: rgba(26,82,118,0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(160,207,238,0.3);
+  color: white;
+  padding: 0.55rem 0.85rem 0.55rem 0.6rem;
+  border-radius: 10px;
   pointer-events: none;
   white-space: nowrap;
   display: none;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  align-items: center;
+  gap: 0.55rem;
+  transform: translateY(-4px);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+/* flag sits on the left of the tooltip in a small clipped circle */
+#map-tooltip .tooltip-flag {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* text column - country name and count stack vertically */
+#map-tooltip .tooltip-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* country name in lora italic to match the rest of the site voice */
+#map-tooltip .tooltip-name {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.1;
+  color: white;
+}
+
+/* artefact count in warm terracotta for a subtle accent */
+#map-tooltip .tooltip-count {
+  font-family: 'Lato', sans-serif;
+  font-size: 10.5px;
+  color: var(--warm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* shown while the count is still being fetched for the first time */
+#map-tooltip .tooltip-count.loading {
+  color: rgba(255,255,255,0.4);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* subtle arrow indicator at the end */
+#map-tooltip::after {
+  content: '→';
+  color: var(--accent-light);
+  font-size: 12px;
+  margin-left: 0.15rem;
+  opacity: 0.7;
+}
+
+/* show flex instead of block when visible */
+#map-tooltip.visible {
+  display: inline-flex;
 }
 
 /* 
