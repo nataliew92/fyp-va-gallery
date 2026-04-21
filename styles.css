@@ -107,26 +107,66 @@ body::before {
 }
 
 .suggestion-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0.3rem 0.8rem;
+  position: relative;
+  overflow: hidden;
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 0;
   border-radius: 20px;
   font-family: 'Lato', sans-serif;
   font-size: 14px;
-  color: rgba(255,255,255,0.8);
   cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  transition: background 0.15s, border-color 0.15s;
   flex-shrink: 0;
+  height: 32px;
+  min-width: 110px;
 }
 
 .suggestion-chip:hover {
-  background-color: rgba(255,255,255,0.22);
-  border-color: rgba(255,255,255,0.5);
-  color: white;
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(160,207,238,0.5);
+}
+
+/* default state - flag and country name, perfectly centred in the chip */
+.chip-default {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+  padding: 0 0.9rem;
+}
+
+/* hover state - artefact count, sits beneath until hovered */
+.chip-hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+  font-style: italic;
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  color: var(--accent-light);
+  white-space: nowrap;
+  padding: 0 0.9rem;
+}
+
+/* on hover the default slides up and out, hover state slides up into place */
+.suggestion-chip:hover .chip-default {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.suggestion-chip:hover .chip-hover {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .suggestion-chip .fi {
@@ -1537,4 +1577,9 @@ body.panel-open #panel-card {
   width: 30px;
   height: 1px;
   background: rgba(160,207,238,0.25);
+}
+
+/* hide the header suggestions on smaller screens to save space - they aren't essential and the panel is the main focus anyway */
+@media (max-width: 900px) {
+  #header-suggestions { display: none; }
 }

@@ -27,12 +27,30 @@
     </div>
     <div id="header-suggestions">
       <span id="header-suggestions-label">Start exploring →</span>
-      <button class="suggestion-chip" onclick="openSuggestion('Japan')"><span class="fi fi-jp"></span> Japan</button>
-      <button class="suggestion-chip" onclick="openSuggestion('China')"><span class="fi fi-cn"></span> China</button>
-      <button class="suggestion-chip" onclick="openSuggestion('India')"><span class="fi fi-in"></span> India</button>
-      <button class="suggestion-chip" onclick="openSuggestion('Italy')"><span class="fi fi-it"></span> Italy</button>
-      <button class="suggestion-chip" onclick="openSuggestion('Egypt')"><span class="fi fi-eg"></span> Egypt</button>
-      <button class="suggestion-chip" onclick="openSuggestion('France')"><span class="fi fi-fr"></span> France</button>
+      <button class="suggestion-chip" data-country="Japan" onclick="openSuggestion('Japan')">
+        <span class="chip-default"><span class="fi fi-jp"></span> Japan</span>
+        <span class="chip-hover">Loading…</span>
+      </button>
+      <button class="suggestion-chip" data-country="China" onclick="openSuggestion('China')">
+        <span class="chip-default"><span class="fi fi-cn"></span> China</span>
+        <span class="chip-hover">Loading…</span>
+      </button>
+      <button class="suggestion-chip" data-country="India" onclick="openSuggestion('India')">
+        <span class="chip-default"><span class="fi fi-in"></span> India</span>
+        <span class="chip-hover">Loading…</span>
+      </button>
+      <button class="suggestion-chip" data-country="Italy" onclick="openSuggestion('Italy')">
+        <span class="chip-default"><span class="fi fi-it"></span> Italy</span>
+        <span class="chip-hover">Loading…</span>
+      </button>
+      <button class="suggestion-chip" data-country="Egypt" onclick="openSuggestion('Egypt')">
+        <span class="chip-default"><span class="fi fi-eg"></span> Egypt</span>
+        <span class="chip-hover">Loading…</span>
+      </button>
+      <button class="suggestion-chip" data-country="France" onclick="openSuggestion('France')">
+        <span class="chip-default"><span class="fi fi-fr"></span> France</span>
+        <span class="chip-hover">Loading…</span>
+      </button>
     </div>
   </header>
 

@@ -667,3 +667,32 @@ function startCarouselTimer() {
 if (carouselSlides.length > 0) {
   startCarouselTimer();
 }
+
+// preloads artefact counts for each suggestion chip so the hover state can show real numbers
+// runs once when the page loads, silently in the background
+function preloadSuggestionCounts() {
+  const chips = document.querySelectorAll('.suggestion-chip');
+
+  chips.forEach(chip => {
+    const country = chip.dataset.country;
+    const url = `${API_BASE}?q_place_name=${encodeURIComponent(country)}&page_size=1`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        const count = data.info.record_count;
+        // round to nearest hundred for nicer display and softens the loose api filter
+        const rounded = Math.round(count / 100) * 100;
+        const hoverEl = chip.querySelector('.chip-hover');
+        hoverEl.textContent = `~${rounded.toLocaleString()} artefacts`;
+      })
+      .catch(() => {
+        // fallback if the request fails - just hide the hover state
+        const hoverEl = chip.querySelector('.chip-hover');
+        hoverEl.textContent = 'Explore →';
+      });
+  });
+}
+
+// kick it off after a brief delay so it doesn't compete with the map loading
+setTimeout(preloadSuggestionCounts, 1000);
