@@ -1,5 +1,4 @@
 // intro and pill onboarding
-
 function dismissIntro() {
   const intro = document.getElementById('intro');
   intro.classList.add('dismissing');
@@ -9,16 +8,19 @@ function dismissIntro() {
   }, 500);
 }
 
+
 function showPill() {
   const pill = document.getElementById('pill');
   pill.classList.add('visible');
 }
+
 
 function dismissPill() {
   const pill = document.getElementById('pill');
   pill.classList.add('dismissed');
   setTimeout(() => pill.remove(), 500);
 }
+
 
 // URLs for the V&A API and a variable to control how many results per page
 const API_BASE   = 'https://api.vam.ac.uk/v2/objects/search';
@@ -49,12 +51,15 @@ const NAME_FIXES = {
   'S. Sudan':                        'South Sudan',
 };
 
+
 function normaliseName(raw) { return NAME_FIXES[raw] || raw; }
+
 
 // called when a suggestion chip in the header is clicked
 function openSuggestion(countryName) {
   openCountryPanel(countryName);
 }
+
 
 // setting up the leaflet map - center it on europe and set zoom limits so it doesn't go too far out
 const map = L.map('map', {
@@ -92,12 +97,14 @@ const styleDefault  = {
   weight:0.5, opacity:1
 };
 
+
 const styleHover    = {
   fillColor:'#1a5276',
   fillOpacity:0.2,
   color:'#1a5276',
   weight:2,
   opacity:1 };
+
 
 const styleSelected = {
   fillColor:'#1a5276',
@@ -127,12 +134,15 @@ document.getElementById('map').addEventListener('mousemove', e => {
   tooltip.style.top  = (e.clientY - 28) + 'px';
 });
 
+
 function getName(feature) {
   return normaliseName(feature.properties.ADMIN || feature.properties.name || 'Unknown');
 }
 
+
 // caches artefact counts so we only hit the api once per country
 const countryCountCache = {};
+
 
 // fetches the artefact count for a country and updates the tooltip if still showing that country
 function fetchCountryCount(countryName, targetEl) {
@@ -171,13 +181,14 @@ function renderCount(el, count, expectedCountry) {
   }
 }
 
+
 function onHover(e) {
   if (e.target !== activeLayer) e.target.setStyle({ ...styleHover });
 
   const countryName = getName(e.target.feature);
   const flagCode    = COUNTRY_FLAGS[countryName];
 
-  // build up the rich tooltip content
+  // build up the tooltip content
   const flagHtml = flagCode
     ? `<span class="tooltip-flag" style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/flags/4x3/${flagCode}.svg');"></span>`
     : '';
@@ -197,10 +208,12 @@ function onHover(e) {
   fetchCountryCount(countryName, countEl);
 }
 
+
 function onOut(e) {
   if (e.target !== activeLayer) e.target.setStyle({ ...styleDefault });
   tooltip.classList.remove('visible');
 }
+
 
 function onClick(e) {
   L.DomEvent.stopPropagation(e);
@@ -213,8 +226,10 @@ function onClick(e) {
 
 map.on('click', () => closeCountryPanel());
 
+
 // stores any active inspiration filters
 let inspoOverride = null;
+
 
 // maps country names to their two letter flag icon codes
 const COUNTRY_FLAGS = {
@@ -293,6 +308,7 @@ const COUNTRY_FLAGS = {
   'Tuvalu': 'tv',
 };
 
+
 // functions to open and close the country popup and load the relevant data when it's opened
 function openCountryPanel(countryName, preselectCategory) {
   activeCountry = countryName;
@@ -319,16 +335,24 @@ function openCountryPanel(countryName, preselectCategory) {
   }
 }
 
+
+// fetches categories dynamically for the selected country and populates the dropdown
+// uses the V&A's clusters endpoint, which returns category data specific to each country
+// optionally preselects a category if passed in (used by the inspiration menu)
 function loadCategories(countryName, preselectLabel) {
   const select = document.getElementById('panel-category');
+  // show a loading state while the request is in flight and disable the dropdown to prevent user interaction
   select.innerHTML = '<option value="">Loading categories...</option>';
   select.disabled = true;
 
+  // request all available categories for this country
+  // cluster_size=100 ensures we get a reasonable cap of categories rather than the default
   const url = `https://api.vam.ac.uk/v2/objects/clusters/category/search?q_place_name=${encodeURIComponent(countryName)}&cluster_size=100`;
 
   fetch(url)
     .then(r => r.json())
     .then(data => {
+      // default "All categories" option that clears any filter
       let options = '<option value="">All categories</option>';
       data
         .filter(cat => cat.id && cat.value && cat.count > 0)
@@ -339,7 +363,8 @@ function loadCategories(countryName, preselectLabel) {
       select.innerHTML = options;
       select.disabled  = false;
 
-      // if we have a category to preselect, find it and re-fetch with it
+      // if we have a category to preselect, find its real id from the loaded list and apply it
+      // this avoids the issue where artefacts were pre-filtered by the inspiration menu using a hardcoded category id that doesn't actually apply to the selected country, resulting in zero results and a confusing empty state
       if (preselectLabel) {
         const match = data.find(cat => cat.value.toLowerCase() === preselectLabel.toLowerCase());
         if (match) {
@@ -350,6 +375,7 @@ function loadCategories(countryName, preselectLabel) {
       }
     })
     .catch(() => {
+      // fallback if the request fails - if everything fails or the API is unavailable
       select.innerHTML = `
         <option value="">All categories</option>
         <option value="THES48904">Ceramics</option>
@@ -364,6 +390,7 @@ function loadCategories(countryName, preselectLabel) {
     });
 }
 
+
 function closeCountryPanel() {
   document.body.classList.remove('panel-open');
   if (activeLayer) { activeLayer.setStyle({ ...styleDefault }); activeLayer = null; }
@@ -371,10 +398,12 @@ function closeCountryPanel() {
   inspoOverride = null; // make sure filters are cleared when panel closes
 }
 
+
 // close the popup if user clicks the dark background area outside it
 function handleOverlayClick(e) {
   if (e.target === document.getElementById('overlay')) closeCountryPanel();
 }
+
 
 // this is where the actual API call happens - sends a request to the V&A and gets artefacts back
 function fetchArtefacts(page = 1) {
@@ -404,6 +433,7 @@ function fetchArtefacts(page = 1) {
       .catch(() => showError());
   }
 }
+
 
 // keeps fetching api pages until we have enough records with images
 // or we've exhausted all available pages
@@ -443,6 +473,7 @@ function fetchWithImages(page, category, collected = [], apiPage = null, totalPa
     })
     .catch(() => showError());
 }
+
 
 function renderResults(data) {
   let records      = data.records;
@@ -488,6 +519,7 @@ function renderResults(data) {
   buildPagination(currentPage, totalPages);
   document.getElementById('panel-body').scrollTo({ top: 0, behavior: 'smooth' });
 }
+
 
 function buildPagination(page, totalPages) {
   const el = document.getElementById('panel-pagination');
@@ -542,13 +574,16 @@ function openDetail(index) {
   document.getElementById('detail-overlay').classList.add('visible');
 }
 
+
 function closeDetail() {
   document.getElementById('detail-overlay').classList.remove('visible');
 }
 
+
 function handleDetailOverlayClick(e) {
   if (e.target === document.getElementById('detail-overlay')) closeDetail();
 }
+
 
 // pressing escape closes the detail popup first, then the country popup if you press it again
 document.addEventListener('keydown', e => {
@@ -572,32 +607,37 @@ function showLoading() {
   document.getElementById('panel-result-count').textContent = '';
 }
 
+
 function hideLoading() {
   document.getElementById('panel-loading').style.display = 'none';
 }
+
 
 function showError() {
   hideLoading();
   document.getElementById('panel-error').style.display = 'block';
 }
 
-// inspiration menu
 
+// inspiration menu
 const inspoSelections = {
   category: { label:'Ceramics', value:'THES48904', emoji:'🏺' },
   country:  { label:'Japan',    value:'Japan',     flag:'jp' },
 };
+
 
 function openInspo() {
   document.getElementById('inspo-overlay').classList.add('visible');
   document.getElementById('inspo-panel').classList.add('visible');
 }
 
+
 function closeInspo() {
   document.getElementById('inspo-overlay').classList.remove('visible');
   document.getElementById('inspo-panel').classList.remove('visible');
   closeAllSelectors();
 }
+
 
 function toggleSelector(type) {
   const opts   = document.getElementById('opts-' + type);
@@ -610,10 +650,12 @@ function toggleSelector(type) {
   }
 }
 
+
 function closeAllSelectors() {
   document.querySelectorAll('.inspo-options').forEach(el => el.classList.remove('open'));
   document.querySelectorAll('.inspo-selector-btn').forEach(el => el.classList.remove('open'));
 }
+
 
 function pick(type, label, value, extra) {
   const btn = document.querySelector('#sel-' + type + ' .inspo-selector-btn');
@@ -637,12 +679,14 @@ function pick(type, label, value, extra) {
   document.getElementById('inspo-result').classList.remove('visible');
 }
 
+
 function discover() {
   const { category, country } = inspoSelections;
   inspoOverride = null; // reset before setting new filters so nothing carries over
   closeInspo();
   openCountryPanel(country.value, category.label);
 }
+
 
 const inspoAllOptions = {
   category: [
@@ -671,6 +715,7 @@ const inspoAllOptions = {
   ],
 };
 
+
 function shuffle() {
   ['category','country'].forEach(type => {
     const opts   = inspoAllOptions[type];
@@ -685,6 +730,7 @@ document.addEventListener('click', e => {
     closeAllSelectors();
   }
 });
+
 
 // carousel on the onboarding - auto-advances every few seconds but user can also click arrows or dots
 const carouselSlides = document.querySelectorAll('.carousel-slide');
@@ -701,17 +747,20 @@ function carouselShow(i) {
   carouselDots[carouselIndex].classList.add('active');
 }
 
+
 // step forward or backward by amount (1 or -1)
 function carouselGo(amount) {
   carouselShow(carouselIndex + amount);
   restartCarouselTimer();
 }
 
+
 // jump straight to a specific slide when a dot is clicked
 function carouselJump(i) {
   carouselShow(i);
   restartCarouselTimer();
 }
+
 
 // reset the auto-advance timer after any manual interaction
 // otherwise the carousel might tick over right after the user clicks
@@ -720,13 +769,16 @@ function restartCarouselTimer() {
   startCarouselTimer();
 }
 
+
 function startCarouselTimer() {
   carouselTimer = setInterval(() => carouselShow(carouselIndex + 1), 3500);
 }
 
+
 if (carouselSlides.length > 0) {
   startCarouselTimer();
 }
+
 
 // preloads artefact counts for each suggestion chip so the hover state can show real numbers
 // runs once when the page loads, silently in the background
@@ -753,6 +805,7 @@ function preloadSuggestionCounts() {
       });
   });
 }
+
 
 // kick it off after a brief delay so it doesn't compete with the map loading
 setTimeout(preloadSuggestionCounts, 1000);
