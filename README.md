@@ -21,9 +21,9 @@ This is part of a final year university project (CIS3425 - Edge Hill University)
 - Natural Earth GeoJSON (country boundary data)
 
 ## Running locally
-1. Clone the repository
+1. If you do not have the files, clone the repository
 2. Open the project folder
-3. Open index.html directly in a modern browser, or run it via VS Code's Live Server extension for best results
+3. Double click index.html directly or open it in a modern browser
 4. No installation or build steps required
 Note: an internet connection is required to load the V&A API and CDN-hosted libraries.
 
