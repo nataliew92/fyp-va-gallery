@@ -14,25 +14,39 @@
   --accent: #1a5276;
   --accent-dark: #154360;
   --accent-light: #a0cfee;
-  --warm: #c4743b; /* warm terracotta used sparingly for accents */
-  --cream-bg:    #f5f2ee;  /* page background */
-  --cream-card:  #faf8f5;  /* card and panel backgrounds */
-  --ink:         #1a1714;  /* primary text colour */
+  --warm: #c4743b;
+  /* warm terracotta used sparingly for accents */
+  --cream-bg: #f5f2ee;
+  /* page background */
+  --cream-card: #faf8f5;
+  /* card and panel backgrounds */
+  --ink: #1a1714;
+  /* primary text colour */
 
   /* z-index scale - documents the visual layering of components. 
   larger gaps between tiers leave room for future components to be added without
   renumbering. internal stacking contexts (e.g. inside the carousel or intro keep their
   raw numbers because they only compete with their siblings. */
-  --z-base:          1;     /* paper texture and map */
-  --z-panel:         500;   /* country panel dimming overlay */
-  --z-card:          600;   /* artefact cards inside the panel */
-  --z-floating:      900;   /* map tooltip and pill notification */
-  --z-header:        1000;  /* fixed header bar */
-  --z-trigger:       1001;  /* inspiration trigger button */
-  --z-modal:         2000;  /* modal overlays (detail + inspo) */
-  --z-modal-content: 2100;  /* modal panel above its overlay */
-  --z-dropdown:      2200;  /* dropdowns within modals */
-  --z-intro:         3000;  /* onboarding screen */ 
+  --z-base: 1;
+  /* paper texture and map */
+  --z-panel: 500;
+  /* country panel dimming overlay */
+  --z-card: 600;
+  /* artefact cards inside the panel */
+  --z-floating: 900;
+  /* map tooltip and pill notification */
+  --z-header: 1000;
+  /* fixed header bar */
+  --z-trigger: 1001;
+  /* inspiration trigger button */
+  --z-modal: 2000;
+  /* modal overlays (detail + inspo) */
+  --z-modal-content: 2100;
+  /* modal panel above its overlay */
+  --z-dropdown: 2200;
+  /* dropdowns within modals */
+  --z-intro: 3000;
+  /* onboarding screen */
 
   /* fonts */
   --font-sans: 'Lato', sans-serif;
@@ -141,6 +155,10 @@ body::before {
   white-space: nowrap;
   flex-shrink: 0;
   letter-spacing: 0.04em;
+}
+
+#header-suggestions-label::after {
+  content: ' →';
 }
 
 .suggestion-chip {
@@ -341,7 +359,7 @@ body.panel-open #inspo-trigger {
 }
 
 #panel-card {
-  background-color: var(--cream-card  );
+  background-color: var(--cream-card);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 18px;
   width: 100%;
@@ -602,6 +620,10 @@ body.panel-open #panel-card {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 1rem;
+  /* list reset - the ul has default padding-left and bullet points which we don't want */
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* individual artefact cards */
@@ -614,7 +636,7 @@ body.panel-open #panel-card {
   transition: box-shadow 0.15s, transform 0.15s;
   position: relative;
   z-index: var(--z-card);
-    /* button reset - removes default button styling so the card looks identical to before */
+  /* button reset - removes default button styling so the card looks identical to before */
   padding: 0;
   font: inherit;
   color: inherit;
@@ -1000,7 +1022,10 @@ body.panel-open #panel-card {
   #intro::before {
     animation: none;
   }
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -1733,9 +1758,22 @@ body.panel-open #panel-card {
   animation: rise 0.6s 0.55s both;
 }
 
+/* vertical line before each stat except the first - replaces the previous .stat-divider divs */
+.intro-stat:not(:first-child)::before {
+  content: '';
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.15);
+  position: absolute;
+  left: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .intro-stat {
+  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   gap: 0.2rem;
 }
@@ -1758,12 +1796,6 @@ body.panel-open #panel-card {
   font-weight: 700;
 }
 
-/* vertical line between each stat */
-.stat-divider {
-  width: 1px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.15);
-}
 
 /* sparkle divider between stats and body text */
 #intro-divider {
@@ -1824,8 +1856,19 @@ body.panel-open #panel-card {
   outline-offset: 2px;
 }
 
-
-
+/* visually hidden but announced by screen readers - 
+   standard utility for adding context that only assistive tech needs */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* hide the header suggestions on smaller screens to save space - they aren't essential and the panel is the main focus anyway */
 @media (max-width: 900px) {

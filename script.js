@@ -508,14 +508,16 @@ function renderResults(data) {
       : `<span class="no-img">No image</span>`;
 
     return `
-      <button class="card" type="button" onclick="openDetail(${i})">
-        <div class="card-img">${imgContent}</div>
-        <div class="card-body">
-          ${place ? `<div class="card-place-badge">${place}</div>` : ''}
-          <div class="card-title">${title}</div>
-          ${date ? `<div class="card-date">${date}</div>` : ''}
-        </div>
-      </button>`;
+      <li>
+        <button class="card" type="button" onclick="openDetail(${i})">
+          <div class="card-img">${imgContent}</div>
+          <div class="card-body">
+            ${place ? `<div class="card-place-badge">${place}</div>` : ''}
+            <div class="card-title">${title}</div>
+            ${date ? `<div class="card-date">${date}</div>` : ''}
+          </div>
+        </button>
+      </li>`;
   }).join('');
 
   buildPagination(currentPage, totalPages);
@@ -649,13 +651,17 @@ function toggleSelector(type) {
   if (!isOpen) {
     opts.classList.add('open');
     btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
   }
 }
 
 
 function closeAllSelectors() {
   document.querySelectorAll('.inspo-options').forEach(el => el.classList.remove('open'));
-  document.querySelectorAll('.inspo-selector-btn').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.inspo-selector-btn').forEach(el => {
+    el.classList.remove('open');
+    el.setAttribute('aria-expanded', 'false');
+  });
 }
 
 
@@ -785,7 +791,7 @@ const carouselEl = document.getElementById('intro-carousel');
 if (carouselEl) {
   carouselEl.addEventListener('mouseenter', () => clearInterval(carouselTimer));
   carouselEl.addEventListener('mouseleave', startCarouselTimer);
-  carouselEl.addEventListener('focusin',  () => clearInterval(carouselTimer));
+  carouselEl.addEventListener('focusin', () => clearInterval(carouselTimer));
   carouselEl.addEventListener('focusout', startCarouselTimer);
 }
 

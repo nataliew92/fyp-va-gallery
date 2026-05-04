@@ -29,40 +29,39 @@
       <h1>Museum<span class="title-spark" aria-hidden="true">✦</span><em>World Collection</em></h1>
       <p>Explore the collection through place</p>
     </div>
-    <div id="header-suggestions">
-      <span id="header-suggestions-label">Start exploring →</span>
+    <nav id="header-suggestions" aria-labelledby="header-suggestions-label">
+      <span id="header-suggestions-label">Start exploring</span>
       <button class="suggestion-chip" data-country="Japan" onclick="openSuggestion('Japan')">
-        <span class="chip-default"><span class="fi fi-jp"></span> Japan</span>
+        <span class="chip-default"><span class="fi fi-jp" aria-hidden="true"></span> Japan</span>
         <span class="chip-hover">Loading…</span>
       </button>
       <button class="suggestion-chip" data-country="China" onclick="openSuggestion('China')">
-        <span class="chip-default"><span class="fi fi-cn"></span> China</span>
+        <span class="chip-default"><span class="fi fi-cn" aria-hidden="true"></span> China</span>
         <span class="chip-hover">Loading…</span>
       </button>
       <button class="suggestion-chip" data-country="India" onclick="openSuggestion('India')">
-        <span class="chip-default"><span class="fi fi-in"></span> India</span>
+        <span class="chip-default"><span class="fi fi-in" aria-hidden="true"></span> India</span>
         <span class="chip-hover">Loading…</span>
       </button>
       <button class="suggestion-chip" data-country="Italy" onclick="openSuggestion('Italy')">
-        <span class="chip-default"><span class="fi fi-it"></span> Italy</span>
+        <span class="chip-default"><span class="fi fi-it" aria-hidden="true"></span> Italy</span>
         <span class="chip-hover">Loading…</span>
       </button>
       <button class="suggestion-chip" data-country="Egypt" onclick="openSuggestion('Egypt')">
-        <span class="chip-default"><span class="fi fi-eg"></span> Egypt</span>
+        <span class="chip-default"><span class="fi fi-eg" aria-hidden="true"></span> Egypt</span>
         <span class="chip-hover">Loading…</span>
       </button>
       <button class="suggestion-chip" data-country="France" onclick="openSuggestion('France')">
-        <span class="chip-default"><span class="fi fi-fr"></span> France</span>
+        <span class="chip-default"><span class="fi fi-fr" aria-hidden="true"></span> France</span>
         <span class="chip-hover">Loading…</span>
       </button>
-    </div>
+    </nav>
   </header>
 
   <!-- the map goes here, leaflet fills this div -->
   <main>
     <div id="map" role="application" aria-label="Interactive world map"></div>
-    <div id="map-tooltip" role="tooltip"></div>
-    <p id="hint" aria-hidden="true">← <span>Click any country</span> to browse artefacts →</p>
+    <div id="map-tooltip" aria-hidden="true"></div>
   </main>
 
   <!-- popup that appears when you click a country -->
@@ -80,7 +79,7 @@
             Back
           </button>
           <!-- flag gets injected here by javascript when a country is opened -->
-          <span id="panel-country-flag"></span>
+          <span id="panel-country-flag" aria-hidden="true"></span>
           <h2 id="panel-country-name"></h2>
           <p id="panel-result-count"></p>
         </div>
@@ -122,8 +121,8 @@
           <p>Nothing found for this selection.</p>
           <p>Try a different category or untick "Images only"</p>
         </div>
-        <p id="panel-error">Could not reach the V&amp;A API. Check your connection.</p>
-        <div id="panel-grid"></div>
+        <p id="panel-error" aria-live="polite">Could not reach the V&amp;A API. Check your connection.</p>
+        <ul id="panel-grid" role="list"></ul>
         <nav id="panel-pagination" aria-label="Pagination"></nav>
       </section>
     </article>
@@ -157,21 +156,22 @@
           </div>
         </div>
       </div>
-      <div id="detail-footer">
+      <footer id="detail-footer">
         <span id="detail-accession"></span>
         <a id="detail-va-link" href="#" target="_blank" rel="noopener noreferrer">
-          View full record on V&amp;A ↗
+          View full record on V&amp;A <span aria-hidden="true">↗</span>
+          <span class="sr-only">(opens in a new tab)</span>
         </a>
-      </div>
+      </footer>
     </article>
   </div>
 
   <!-- full screen intro onboarding -->
   <div id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-heading">
-    <div id="intro-overlay"></div>
-    <div id="intro-content">
+    <div id="intro-overlay" aria-hidden="true"></div>
+    <article id="intro-content">
       <!-- museum branding at the top -->
-      <p id="museum-label">Museum World Collection</p>
+      <small id="museum-label">Museum World Collection</small>
       <h2 id="intro-heading">
         <span class="heading-key"> <!-- SVG for the animation on the heading Explore text -->
           Explore
@@ -183,7 +183,7 @@
       </h2>
 
       <!-- carousel showing sample artefacts pulled from the v&a api -->
-      <div id="intro-carousel">
+      <section id="intro-carousel" aria-label="Featured artefacts from the collection">
         <figure class="carousel-slide active">
           <img class="carousel-image" src="images/2011FB4099.jpg"
             alt="Cream coloured statue of a kneeling figure with arms raised upward, wearing a belted robe and a mantle draped over one shoulder.">
@@ -215,25 +215,23 @@
           <button class="carousel-dot" onclick="carouselJump(2)" aria-label="Go to image 3"></button>
           <button class="carousel-dot" onclick="carouselJump(3)" aria-label="Go to image 4"></button>
         </div>
-      </div>
+      </section>
 
       <!-- stats strip showing the scale of the collection -->
-      <div id="intro-stats">
+      <dl id="intro-stats">
         <div class="intro-stat">
-          <div class="intro-stat-number">2.3M</div>
-          <div class="intro-stat-label">Objects</div>
+          <dt class="intro-stat-label">Objects</dt>
+          <dd class="intro-stat-number">2.3M</dd>
         </div>
-        <div class="stat-divider" aria-hidden="true"></div>
         <div class="intro-stat">
-          <div class="intro-stat-number">180+</div>
-          <div class="intro-stat-label">Countries</div>
+          <dt class="intro-stat-label">Countries</dt>
+          <dd class="intro-stat-number">180+</dd>
         </div>
-        <div class="stat-divider" aria-hidden="true"></div>
         <div class="intro-stat">
-          <div class="intro-stat-number">5,000</div>
-          <div class="intro-stat-label">Years</div>
+          <dt class="intro-stat-label">Years</dt>
+          <dd class="intro-stat-number">5,000</dd>
         </div>
-      </div>
+      </dl>
 
       <!-- small decorative divider before the description -->
       <div id="intro-divider" aria-hidden="true">✦</div>
@@ -246,7 +244,7 @@
             stroke-linejoin="round" />
         </svg>
       </button>
-    </div>
+    </article>
   </div>
 
   <!-- bottom pill reminder -->
@@ -262,7 +260,7 @@
       <p id="pill-main">Click any country to explore</p>
       <p id="pill-hint">Drag the map to navigate · scroll to zoom</p>
     </div>
-    <button id="pill-close" onclick="dismissPill()">✕</button>
+    <button id="pill-close" onclick="dismissPill()" aria-label="Dismiss notification">✕</button>
   </aside>
 
   <!-- inspiration menu -->
@@ -286,47 +284,68 @@
       <span class="inspo-word">Show me</span>
 
       <div class="inspo-selector" id="sel-category">
-        <button class="inspo-selector-btn" onclick="toggleSelector('category')">
+        <button class="inspo-selector-btn" onclick="toggleSelector('category')" aria-haspopup="true" aria-expanded="false">
           <span class="sel-emoji" aria-hidden="true">🏺</span>
           <span class="sel-label">Ceramics</span>
-          <span class="chevron">▾</span>
+          <span class="chevron" aria-hidden="true">▾</span>
         </button>
         <div class="inspo-options" id="opts-category">
-          <button type="button" class="inspo-option selected" onclick="pick('category','Ceramics','THES48904','🏺')"><span class="opt-emoji" aria-hidden="true">🏺</span>Ceramics</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Jewellery','THES48986','💍')"><span class="opt-emoji" aria-hidden="true">💍</span>Jewellery</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Textiles','THES49093','🧵')"><span class="opt-emoji" aria-hidden="true">🧵</span>Textiles</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Sculpture','THES49070','🗿')"><span class="opt-emoji" aria-hidden="true">🗿</span>Sculpture</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Paintings','THES49048','🖼️')"><span class="opt-emoji" aria-hidden="true">🖼️</span>Paintings</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Fashion','THES49003','👗')"><span class="opt-emoji" aria-hidden="true">👗</span>Fashion</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Furniture','THES48943','🪑')"><span class="opt-emoji" aria-hidden="true">🪑</span>Furniture</button>
-          <button type="button" class="inspo-option" onclick="pick('category','Photographs','THES49056','📷')"><span class="opt-emoji" aria-hidden="true">📷</span>Photographs</button>
+          <button type="button" class="inspo-option selected"
+            onclick="pick('category','Ceramics','THES48904','🏺')"><span class="opt-emoji"
+              aria-hidden="true">🏺</span>Ceramics</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Jewellery','THES48986','💍')"><span
+              class="opt-emoji" aria-hidden="true">💍</span>Jewellery</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Textiles','THES49093','🧵')"><span
+              class="opt-emoji" aria-hidden="true">🧵</span>Textiles</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Sculpture','THES49070','🗿')"><span
+              class="opt-emoji" aria-hidden="true">🗿</span>Sculpture</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Paintings','THES49048','🖼️')"><span
+              class="opt-emoji" aria-hidden="true">🖼️</span>Paintings</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Fashion','THES49003','👗')"><span
+              class="opt-emoji" aria-hidden="true">👗</span>Fashion</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Furniture','THES48943','🪑')"><span
+              class="opt-emoji" aria-hidden="true">🪑</span>Furniture</button>
+          <button type="button" class="inspo-option" onclick="pick('category','Photographs','THES49056','📷')"><span
+              class="opt-emoji" aria-hidden="true">📷</span>Photographs</button>
         </div>
       </div>
 
       <span class="inspo-word">from</span>
 
       <div class="inspo-selector" id="sel-country">
-        <button class="inspo-selector-btn" onclick="toggleSelector('country')">
+        <button class="inspo-selector-btn" onclick="toggleSelector('country')" aria-haspopup="true" aria-expanded="false">
           <span class="fi fi-jp sel-flag"></span>
           <span class="sel-label">Japan</span>
-          <span class="chevron">▾</span>
+          <span class="chevron" aria-hidden="true">▾</span>
         </button>
-          <div class="inspo-options" id="opts-country">
-            <button type="button" class="inspo-option selected" onclick="pick('country','Japan','Japan','jp')"><span class="fi fi-jp" aria-hidden="true"></span>Japan</button>
-            <button type="button" class="inspo-option" onclick="pick('country','China','China','cn')"><span class="fi fi-cn" aria-hidden="true"></span>China</button>
-            <button type="button" class="inspo-option" onclick="pick('country','India','India','in')"><span class="fi fi-in" aria-hidden="true"></span>India</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Italy','Italy','it')"><span class="fi fi-it" aria-hidden="true"></span>Italy</button>
-            <button type="button" class="inspo-option" onclick="pick('country','France','France','fr')"><span class="fi fi-fr" aria-hidden="true"></span>France</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Egypt','Egypt','eg')"><span class="fi fi-eg" aria-hidden="true"></span>Egypt</button>
-            <button type="button" class="inspo-option" onclick="pick('country','England','England','gb-eng')"><span class="fi fi-gb-eng" aria-hidden="true"></span>England</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Iran','Iran','ir')"><span class="fi fi-ir" aria-hidden="true"></span>Iran</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Turkey','Turkey','tr')"><span class="fi fi-tr" aria-hidden="true"></span>Turkey</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Germany','Germany','de')"><span class="fi fi-de" aria-hidden="true"></span>Germany</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Spain','Spain','es')"><span class="fi fi-es" aria-hidden="true"></span>Spain</button>
-            <button type="button" class="inspo-option" onclick="pick('country','Korea','Korea','kr')"><span class="fi fi-kr" aria-hidden="true"></span>Korea</button>
-          </div>
+        <div class="inspo-options" id="opts-country">
+          <button type="button" class="inspo-option selected" onclick="pick('country','Japan','Japan','jp')"><span
+              class="fi fi-jp" aria-hidden="true"></span>Japan</button>
+          <button type="button" class="inspo-option" onclick="pick('country','China','China','cn')"><span
+              class="fi fi-cn" aria-hidden="true"></span>China</button>
+          <button type="button" class="inspo-option" onclick="pick('country','India','India','in')"><span
+              class="fi fi-in" aria-hidden="true"></span>India</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Italy','Italy','it')"><span
+              class="fi fi-it" aria-hidden="true"></span>Italy</button>
+          <button type="button" class="inspo-option" onclick="pick('country','France','France','fr')"><span
+              class="fi fi-fr" aria-hidden="true"></span>France</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Egypt','Egypt','eg')"><span
+              class="fi fi-eg" aria-hidden="true"></span>Egypt</button>
+          <button type="button" class="inspo-option" onclick="pick('country','England','England','gb-eng')"><span
+              class="fi fi-gb-eng" aria-hidden="true"></span>England</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Iran','Iran','ir')"><span class="fi fi-ir"
+              aria-hidden="true"></span>Iran</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Turkey','Turkey','tr')"><span
+              class="fi fi-tr" aria-hidden="true"></span>Turkey</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Germany','Germany','de')"><span
+              class="fi fi-de" aria-hidden="true"></span>Germany</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Spain','Spain','es')"><span
+              class="fi fi-es" aria-hidden="true"></span>Spain</button>
+          <button type="button" class="inspo-option" onclick="pick('country','Korea','Korea','kr')"><span
+              class="fi fi-kr" aria-hidden="true"></span>Korea</button>
         </div>
       </div>
+    </div>
     </div>
 
     <button id="inspo-discover" onclick="discover()">
