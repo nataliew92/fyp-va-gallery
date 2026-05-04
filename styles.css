@@ -8,11 +8,28 @@
 
 /* defining some custom colours as CSS variables for easy reuse and theming */
 :root {
+
+  /* main blues from the V&A branding, used for the header,
+  map tooltip and various accents throughout the site */
   --accent: #1a5276;
   --accent-dark: #154360;
   --accent-light: #a0cfee;
-  --warm: #c4743b;
-  /* warm terracotta used sparingly for accents */
+  --warm: #c4743b; /* warm terracotta used sparingly for accents */
+
+  /* z-index scale - documents the visual layering of components. 
+  larger gaps between tiers leave room for future components to be added without
+  renumbering. internal stacking contexts (e.g. inside the carousel or intro keep their
+  raw numbers because they only compete with their siblings. */
+  --z-base:          1;     /* paper texture and map */
+  --z-panel:         500;   /* country panel dimming overlay */
+  --z-card:          600;   /* artefact cards inside the panel */
+  --z-floating:      900;   /* map tooltip and pill notification */
+  --z-header:        1000;  /* fixed header bar */
+  --z-trigger:       1001;  /* inspiration trigger button */
+  --z-modal:         2000;  /* modal overlays (detail + inspo) */
+  --z-modal-content: 2100;  /* modal panel above its overlay */
+  --z-dropdown:      2200;  /* dropdowns within modals */
+  --z-intro:         3000;  /* onboarding screen */ 
 }
 
 html,
@@ -30,7 +47,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1;
+  z-index: var(--z-base);
   opacity: 0.04;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
@@ -41,7 +58,7 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: var(--z-header);
   background:
     linear-gradient(90deg, rgba(21, 67, 96, 0.85), rgba(26, 82, 118, 0.85)),
     url('images/2023NP6153.jpg') center/cover no-repeat;
@@ -195,7 +212,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: var(--z-base);
 }
 
 .leaflet-control-attribution {
@@ -211,7 +228,7 @@ body::before {
 /* styled tooltip that follows the cursor when hovering over a country */
 #map-tooltip {
   position: fixed;
-  z-index: 900;
+  z-index: var(--z-floating);
   background: rgba(26, 82, 118, 0.92);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(160, 207, 238, 0.3);
@@ -294,7 +311,7 @@ body::before {
 #overlay {
   position: fixed;
   inset: 0;
-  z-index: 500;
+  z-index: var(--z-panel);
   background-color: rgba(240, 236, 230, 0.2);
   backdrop-filter: blur(4px);
   display: flex;
@@ -588,7 +605,7 @@ body.panel-open #panel-card {
   cursor: pointer;
   transition: box-shadow 0.15s, transform 0.15s;
   position: relative;
-  z-index: 600;
+  z-index: var(--z-card);
     /* button reset - removes default button styling so the card looks identical to before */
   padding: 0;
   font: inherit;
@@ -711,7 +728,7 @@ body.panel-open #panel-card {
 #detail-overlay {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  z-index: var(--z-modal);
   background-color: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(4px);
   display: flex;
@@ -909,7 +926,7 @@ body.panel-open #panel-card {
 #intro {
   position: fixed;
   inset: 0;
-  z-index: 3000;
+  z-index: var(--z-intro);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1136,7 +1153,7 @@ body.panel-open #panel-card {
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 900;
+  z-index: var(--z-floating);
   background-color: var(--accent);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(160, 207, 238, 0.3);
@@ -1281,7 +1298,7 @@ body.panel-open #panel-card {
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  z-index: 1001;
+  z-index: var(--z-floating);
   text-align: center;
   box-shadow: 0 4px 16px rgba(26, 82, 118, 0.5);
 }
@@ -1339,7 +1356,7 @@ body.panel-open #panel-card {
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(3px);
-  z-index: 2000;
+  z-index: var(--z-modal);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
@@ -1356,7 +1373,7 @@ body.panel-open #panel-card {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -48%) scale(0.96);
-  z-index: 2100;
+  z-index: var(--z-modal-content);
   width: 90%;
   max-width: 580px;
   background-color: rgba(26, 82, 118, 0.82);
@@ -1504,7 +1521,7 @@ body.panel-open #panel-card {
   display: none;
   flex-wrap: wrap;
   gap: 0.4rem;
-  z-index: 2200;
+  z-index: var(--z-dropdown);
   min-width: 220px;
   justify-content: center;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
