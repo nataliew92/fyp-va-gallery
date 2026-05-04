@@ -15,6 +15,9 @@
   --accent-dark: #154360;
   --accent-light: #a0cfee;
   --warm: #c4743b; /* warm terracotta used sparingly for accents */
+  --cream-bg:    #f5f2ee;  /* page background */
+  --cream-card:  #faf8f5;  /* card and panel backgrounds */
+  --ink:         #1a1714;  /* primary text colour */
 
   /* z-index scale - documents the visual layering of components. 
   larger gaps between tiers leave room for future components to be added without
@@ -40,8 +43,8 @@ html,
 body {
   height: 100%;
   font-family: var(--font-sans);
-  background-color: #f5f2ee;
-  color: #1a1714;
+  background-color: var(--cream-bg);
+  color: var(--ink);
   overflow: hidden;
 }
 
@@ -338,7 +341,7 @@ body.panel-open #inspo-trigger {
 }
 
 #panel-card {
-  background-color: #faf8f5;
+  background-color: var(--cream-card  );
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 18px;
   width: 100%;
@@ -572,7 +575,7 @@ body.panel-open #panel-card {
 #panel-empty p {
   font-family: var(--font-serif);
   font-size: 1rem;
-  color: #1a1714;
+  color: var(--ink);
   margin-bottom: 0.4rem;
 }
 
@@ -580,7 +583,7 @@ body.panel-open #panel-card {
 #panel-empty span {
   font-family: var(--font-sans);
   font-size: 12px;
-  color: #1a1714;
+  color: var(--ink);
   font-weight: 300;
 }
 
@@ -664,7 +667,7 @@ body.panel-open #panel-card {
   font-weight: 500;
   line-height: 1.4;
   margin-bottom: 3px;
-  color: #1a1714;
+  color: var(--ink);
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -751,7 +754,7 @@ body.panel-open #panel-card {
 }
 
 #detail-card {
-  background-color: #faf8f5;
+  background-color: var(--cream-card);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 14px;
   width: 100%;
@@ -836,7 +839,7 @@ body.panel-open #panel-card {
 
 #detail-close:hover {
   background-color: rgba(0, 0, 0, 0.1);
-  color: #1a1714;
+  color: var(--ink);
 }
 
 #detail-object-type {
@@ -852,7 +855,7 @@ body.panel-open #panel-card {
   font-size: 1.8rem;
   font-weight: 500;
   line-height: 1.2;
-  color: #1a1714;
+  color: var(--ink);
   margin-bottom: 1rem;
   letter-spacing: -0.01em;
 }
