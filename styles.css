@@ -1,6 +1,6 @@
 *,
 *::before,
-*::after { 
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -8,13 +8,15 @@
 
 /* defining some custom colours as CSS variables for easy reuse and theming */
 :root {
-  --accent:      #1a5276;
+  --accent: #1a5276;
   --accent-dark: #154360;
-  --accent-light:#a0cfee;
-  --warm:        #c4743b;  /* warm terracotta used sparingly for accents */
+  --accent-light: #a0cfee;
+  --warm: #c4743b;
+  /* warm terracotta used sparingly for accents */
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: 'Lato', sans-serif;
   background-color: #f5f2ee;
@@ -36,10 +38,12 @@ body::before {
 /* header bar at the top of the page */
 #header {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  background: 
-    linear-gradient(90deg, rgba(21,67,96,0.85), rgba(26,82,118,0.85)),
+  background:
+    linear-gradient(90deg, rgba(21, 67, 96, 0.85), rgba(26, 82, 118, 0.85)),
     url('images/2023NP6153.jpg') center/cover no-repeat;
   backdrop-filter: blur(14px);
   border-bottom: 2px solid var(--accent-light);
@@ -79,8 +83,17 @@ body::before {
 }
 
 @keyframes title-sparkle {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50%      { opacity: 1;   transform: scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
 
 #header p {
@@ -109,8 +122,8 @@ body::before {
 .suggestion-chip {
   position: relative;
   overflow: hidden;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   padding: 0;
   border-radius: 20px;
@@ -124,8 +137,8 @@ body::before {
 }
 
 .suggestion-chip:hover {
-  background: rgba(255,255,255,0.22);
-  border-color: rgba(160,207,238,0.5);
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(160, 207, 238, 0.5);
 }
 
 /* default state - flag and country name, perfectly centred in the chip */
@@ -136,7 +149,7 @@ body::before {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
   padding: 0 0.9rem;
 }
 
@@ -149,7 +162,7 @@ body::before {
   justify-content: center;
   transform: translateY(100%);
   opacity: 0;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
   font-style: italic;
   font-family: 'Lora', serif;
   font-size: 13px;
@@ -199,16 +212,16 @@ body::before {
 #map-tooltip {
   position: fixed;
   z-index: 900;
-  background: rgba(26,82,118,0.92);
+  background: rgba(26, 82, 118, 0.92);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(160,207,238,0.3);
+  border: 1px solid rgba(160, 207, 238, 0.3);
   color: white;
   padding: 0.55rem 0.85rem 0.55rem 0.6rem;
   border-radius: 10px;
   pointer-events: none;
   white-space: nowrap;
   display: none;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   align-items: center;
   gap: 0.55rem;
   transform: translateY(-4px);
@@ -223,8 +236,8 @@ body::before {
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* text column - country name and count stack vertically */
@@ -255,7 +268,7 @@ body::before {
 
 /* shown while the count is still being fetched for the first time */
 #map-tooltip .tooltip-count.loading {
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.4);
   font-style: italic;
   font-weight: 400;
 }
@@ -279,12 +292,17 @@ body::before {
    the map stays visible (blurred) behind it
 */
 #overlay {
-  position: fixed; inset: 0; z-index: 500;
-  background-color: rgba(240,236,230,0.2);
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background-color: rgba(240, 236, 230, 0.2);
   backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 1.5rem;
-  opacity: 0; pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s;
 }
 
@@ -300,16 +318,16 @@ body.panel-open #inspo-trigger {
 
 #panel-card {
   background-color: #faf8f5;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 18px;
   width: 100%;
   max-width: 960px;
   height: 80vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
   transform: translateY(20px) scale(0.98);
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
@@ -320,15 +338,15 @@ body.panel-open #panel-card {
 /* top bar inside the popup - navy gradient to match the header */
 #panel-topbar {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   flex-shrink: 0;
   flex-wrap: nowrap;
-  background: 
-    linear-gradient(90deg, rgba(21,67,96,0.85), rgba(26,82,118,0.85)),
+  background:
+    linear-gradient(90deg, rgba(21, 67, 96, 0.85), rgba(26, 82, 118, 0.85)),
     url('images/2023NP6153.jpg') center/cover no-repeat;
   backdrop-filter: blur(14px);
   border-radius: 18px 18px 0 0;
@@ -365,7 +383,7 @@ body.panel-open #panel-card {
 
 #panel-result-count {
   font-size: 13px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   white-space: nowrap;
   flex-shrink: 0;
   font-family: 'Lora', serif;
@@ -394,7 +412,7 @@ body.panel-open #panel-card {
   border: none;
   font-family: 'Lato', sans-serif;
   font-size: 12px;
-  color: white !important;
+  color: white;
   cursor: pointer;
   padding: 0.2rem 0;
   transition: color 0.15s;
@@ -402,23 +420,24 @@ body.panel-open #panel-card {
 }
 
 #panel-back-btn:hover {
-  color: var(--accent-light) !important;
+  color: var(--accent-light);
 }
 
 /* close button updated for dark background */
 #panel-close-btn {
-  background: rgba(255,255,255,0.9);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--accent);
   width: 32px;
   height: 32px;
   border-radius: 50%;
   font-size: 15px;
   cursor: pointer;
-  display: flex; 
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s; flex-shrink: 0;
+  transition: all 0.15s;
+  flex-shrink: 0;
 }
 
 #panel-close-btn:hover {
@@ -430,9 +449,9 @@ body.panel-open #panel-card {
 #panel-category {
   appearance: none;
   -webkit-appearance: none;
-  background-color: rgba(255,255,255,0.12);
+  background-color: rgba(255, 255, 255, 0.12);
   color: white;
-  border: 1.5px solid rgba(160,207,238,0.35);
+  border: 1.5px solid rgba(160, 207, 238, 0.35);
   border-radius: 8px;
   font-family: 'Lato', sans-serif;
   font-size: 13px;
@@ -448,13 +467,8 @@ body.panel-open #panel-card {
 }
 
 #panel-category:hover {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
   border-color: var(--accent-light);
-}
-
-#panel-category:focus {
-  outline: none;
-  border-color: white;
 }
 
 #panel-category option {
@@ -468,7 +482,7 @@ body.panel-open #panel-card {
   align-items: center;
   gap: 0.4rem;
   font-size: 12px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
@@ -483,7 +497,8 @@ body.panel-open #panel-card {
 
 /* the scrollable area where all the artefact cards appear */
 #panel-body {
-  flex: 1; overflow-y: auto; 
+  flex: 1;
+  overflow-y: auto;
   padding: 1.25rem 1.5rem;
   scroll-behavior: smooth;
 }
@@ -491,8 +506,9 @@ body.panel-open #panel-card {
 #panel-body::-webkit-scrollbar {
   width: 5px;
 }
+
 #panel-body::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.12);
+  background-color: rgba(0, 0, 0, 0.12);
   border-radius: 3px;
 }
 
@@ -500,38 +516,24 @@ body.panel-open #panel-card {
   display: none;
   text-align: center;
   padding: 4rem 1rem;
-  color: rgba(0,0,0,0.3);
-}
-
-/* back button in the top left of the panel - closes it and goes back to the map */
-#panel-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  background: none;
-  border: none;
-  font-family: 'Lato', sans-serif;
-  font-size: 12px;
-  color: rgba(0,0,0,0.35);
-  cursor: pointer;
-  padding: 0.2rem 0;
-  transition: color 0.15s;
-  flex-shrink: 0;
-}
-
-/* turns navy on hover to match the rest of the site */
-#panel-back-btn:hover {
-  color: var(--accent);
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .spinner {
-  width: 30px; height: 30px;
-  border: 2px solid rgba(26,82,118,0.15); border-top-color: var(--accent);
-  border-radius: 50%; margin: 0 auto 0.75rem;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(26, 82, 118, 0.15);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin: 0 auto 0.75rem;
   animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* shown when nothing comes back from the api for the chosen filters */
 #panel-empty {
@@ -549,21 +551,25 @@ body.panel-open #panel-card {
 #panel-empty p {
   font-family: 'Lora', serif;
   font-size: 1rem;
-  color: black;
+  color: #1a1714;
   margin-bottom: 0.4rem;
 }
 
 /* smaller hint underneath telling them what to try */
 #panel-empty span {
   font-size: 12px;
-  color: black;
+  color: #1a1714;
   font-weight: 300;
 }
 
 /* api error message - separate from empty so we can style them differently if needed */
 #panel-error {
-  display: none; text-align: center; padding: 3rem 1rem;
-  color: rgba(0,0,0,0.35); font-size: 13px; font-style: italic;
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+  font-style: italic;
 }
 
 /* grid layout for the cards - auto fills columns based on available space */
@@ -575,26 +581,57 @@ body.panel-open #panel-card {
 
 /* individual artefact cards */
 .card {
-  background-color: white; border: 1px solid rgba(0,0,0,0.07);
-  border-radius: 10px; overflow: hidden; cursor: pointer;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
   transition: box-shadow 0.15s, transform 0.15s;
-  position: relative; z-index: 600;
+  position: relative;
+  z-index: 600;
+    /* button reset - removes default button styling so the card looks identical to before */
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  display: block;
 }
 
 .card:hover {
-  box-shadow: 0 6px 20px rgba(196,116,59,0.12);
+  box-shadow: 0 6px 20px rgba(196, 116, 59, 0.12);
   transform: translateY(-3px);
-  border-color: rgba(196,116,59,0.25);
+  border-color: rgba(196, 116, 59, 0.25);
 }
 
 .card-img {
-  aspect-ratio: 1; background-color: #f0ede8; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1;
+  background-color: #f0ede8;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s; }
-.card:hover .card-img img { transform: scale(1.05); }
-.card-img .no-img { font-size: 10px; color: rgba(0,0,0,0.25); font-style: italic; padding: 0.5rem; text-align: center; }
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s;
+}
+
+.card:hover .card-img img {
+  transform: scale(1.05);
+}
+
+.card-img .no-img {
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.25);
+  font-style: italic;
+  padding: 0.5rem;
+  text-align: center;
+}
 
 .card-body {
   padding: 0.6rem 0.75rem 0.8rem;
@@ -615,13 +652,13 @@ body.panel-open #panel-card {
 
 .card-date {
   font-size: 12px;
-  color: rgba(0,0,0,0.4);
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .card-place-badge {
   display: inline-block;
   font-size: 12px;
-  background-color: rgba(196,116,59,0.1);
+  background-color: rgba(196, 116, 59, 0.1);
   color: var(--warm);
   border-radius: 3px;
   padding: 1px 6px;
@@ -641,8 +678,8 @@ body.panel-open #panel-card {
 
 .page-btn {
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.12);
-  color: rgba(0,0,0,0.5);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   padding: 0.35rem 0.7rem;
   font-family: 'Lato', sans-serif;
@@ -656,15 +693,15 @@ body.panel-open #panel-card {
   color: var(--accent);
 }
 
-.page-btn.active { 
+.page-btn.active {
   background-color: var(--accent);
   border-color: var(--accent);
   color: white;
 }
 
-.page-btn:disabled { 
-  opacity: 0.25; 
-  cursor: not-allowed; 
+.page-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
 }
 
 /* 
@@ -675,7 +712,7 @@ body.panel-open #panel-card {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background-color: rgba(0,0,0,0.45);
+  background-color: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -693,7 +730,7 @@ body.panel-open #panel-card {
 
 #detail-card {
   background-color: #faf8f5;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 14px;
   width: 100%;
   max-width: 700px;
@@ -703,7 +740,7 @@ body.panel-open #panel-card {
   flex-direction: column;
   transform: scale(0.95);
   transition: transform 0.25s;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
 #detail-overlay.visible #detail-card {
@@ -715,7 +752,7 @@ body.panel-open #panel-card {
 }
 
 #detail-card::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
 }
 
@@ -744,13 +781,13 @@ body.panel-open #panel-card {
 
 #detail-image-wrap .detail-no-img {
   font-size: 12px;
-  color: rgba(0,0,0,0.25);
+  color: rgba(0, 0, 0, 0.25);
   font-style: italic;
   padding: 2rem;
   text-align: center;
 }
 
-#detail-info { 
+#detail-info {
   flex: 1;
   padding: 1.5rem;
   display: flex;
@@ -759,9 +796,9 @@ body.panel-open #panel-card {
 
 #detail-close {
   align-self: flex-end;
-  background-color: rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.1);
-  color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.4);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -776,16 +813,16 @@ body.panel-open #panel-card {
 }
 
 #detail-close:hover {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #1a1714;
 }
 
-#detail-object-type { 
+#detail-object-type {
   font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.5rem; 
+  margin-bottom: 0.5rem;
 }
 
 #detail-title {
@@ -806,20 +843,21 @@ body.panel-open #panel-card {
   align-items: baseline;
 
 }
-.detail-meta-label { 
-  color: rgba(0,0,0,0.35);
+
+.detail-meta-label {
+  color: rgba(0, 0, 0, 0.35);
   font-size: 11px;
   min-width: 64px;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .detail-meta-value {
-  color: rgba(0,0,0,0.75);
+  color: rgba(0, 0, 0, 0.75);
 }
 
 #detail-footer {
   padding: 1rem 1.5rem 1.25rem;
-  border-top: 1px solid rgba(0,0,0,0.07);
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -827,26 +865,26 @@ body.panel-open #panel-card {
   flex-wrap: wrap;
 }
 
-#detail-accession { 
+#detail-accession {
   font-size: 11px;
-  color: rgba(0,0,0,0.25);
+  color: rgba(0, 0, 0, 0.25);
   font-family: monospace;
 }
 
 #detail-va-link {
   display: inline-block;
-  padding: 0.55rem 1.25rem; 
+  padding: 0.55rem 1.25rem;
   background-color: var(--accent);
   color: white;
   border-radius: 7px;
-  text-decoration: none; 
+  text-decoration: none;
   font-size: 13px;
   font-weight: 500;
   transition: background-color 0.15s;
   white-space: nowrap;
 }
 
-#detail-va-link:hover{
+#detail-va-link:hover {
   background-color: var(--accent-dark);
 }
 
@@ -855,11 +893,13 @@ body.panel-open #panel-card {
   #panel-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
+
   #detail-top {
     flex-direction: column;
   }
-  #detail-image-wrap
-  { width: 100%;
+
+  #detail-image-wrap {
+    width: 100%;
     min-height: 220px;
     border-radius: 14px 14px 0 0;
   }
@@ -895,6 +935,7 @@ body.panel-open #panel-card {
   0% {
     transform: scale(1) translate(0, 0);
   }
+
   100% {
     transform: scale(1.15) translate(-2%, -2%);
   }
@@ -905,13 +946,15 @@ body.panel-open #panel-card {
 }
 
 @keyframes intro-out {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 #intro-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(26,82,118,0.25);
+  background-color: rgba(26, 82, 118, 0.25);
   z-index: 1;
 }
 
@@ -921,25 +964,22 @@ body.panel-open #panel-card {
   text-align: center;
   max-width: 540px;
   padding: 2.5rem 3rem;
-  background-color: rgba(26,82,118,0.5);
+  background-color: rgba(26, 82, 118, 0.5);
   border-radius: 16px;
   backdrop-filter: blur(4px);
 }
 
 /* reduced motion media query to disable the ken burns effect for users who prefer it - also makes sure the image is still fully visible without animation */
+/* also reduces all other animations on the page so they don't cause motion sickness either */
 @media (prefers-reduced-motion: reduce) {
   #intro::before {
     animation: none;
   }
-}
-
-#intro-eyebrow {
-  font-size: 16px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent-light);
-  margin-bottom: 1rem;
-  animation: rise 0.6s 0.2s both;
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 #intro-heading {
@@ -981,7 +1021,7 @@ body.panel-open #panel-card {
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.15s, transform 0.15s;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   animation: rise 0.6s 0.65s both;
 }
 
@@ -991,8 +1031,15 @@ body.panel-open #panel-card {
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* carousel inside the onboarding panel - cycles through v&a images */
@@ -1003,8 +1050,8 @@ body.panel-open #panel-card {
   margin-bottom: 1.5rem;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  border: 1px solid rgba(160,207,238,0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(160, 207, 238, 0.2);
 }
 
 /* each slide fades in over the previous one */
@@ -1013,18 +1060,28 @@ body.panel-open #panel-card {
   inset: 0;
   opacity: 0;
   transition: opacity 1.2s ease-in-out;
-  background-size: cover;
-  background-position: center;
 }
 
-.carousel-slide.active { opacity: 1; }
+.carousel-slide.active {
+  opacity: 1;
+}
 
 /* gradient overlay so the caption sits on something readable */
 .carousel-slide::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, rgba(21,67,96,0.85) 100%);
+  background: linear-gradient(to bottom, transparent 50%, rgba(21, 67, 96, 0.85) 100%);
+}
+
+/* the actual image inside each slide - sized to fill the slide and crop nicely */
+.carousel-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* caption in the bottom left of each slide */
@@ -1033,11 +1090,11 @@ body.panel-open #panel-card {
   bottom: 0.6rem;
   left: 0.9rem;
   font-size: 11px;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   z-index: 2;
   font-style: italic;
   font-family: 'Lora', serif;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 /* bigger more clickable dots at the bottom */
@@ -1045,7 +1102,7 @@ body.panel-open #panel-card {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
   transition: background 0.3s, width 0.3s;
   border: none;
   padding: 0;
@@ -1053,7 +1110,7 @@ body.panel-open #panel-card {
 }
 
 .carousel-dot:hover {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .carousel-dot.active {
@@ -1082,13 +1139,13 @@ body.panel-open #panel-card {
   z-index: 900;
   background-color: var(--accent);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(160,207,238,0.3);
+  border: 1px solid rgba(160, 207, 238, 0.3);
   border-radius: 50px;
   padding: 0.8rem 1.5rem 0.8rem 1.1rem;
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
@@ -1098,7 +1155,7 @@ body.panel-open #panel-card {
 #pill.visible {
   opacity: 1;
   pointer-events: all;
-  animation: pill-enter 0.4s cubic-bezier(0.4,0,0.2,1) forwards;
+  animation: pill-enter 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 #pill.dismissed {
@@ -1107,8 +1164,15 @@ body.panel-open #panel-card {
 }
 
 @keyframes pill-enter {
-  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 #pill-icon {
@@ -1126,16 +1190,33 @@ body.panel-open #panel-card {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1.5px solid rgba(160,207,238,0.7);
+  border: 1.5px solid rgba(160, 207, 238, 0.7);
   opacity: 0;
   animation: pill-ripple 2s ease-out infinite;
 }
 
 @keyframes pill-ripple {
-  0%,25% { transform: scale(0.4); opacity: 0; }
-  30%    { transform: scale(0.4); opacity: 1; }
-  70%    { transform: scale(1.9); opacity: 0; }
-  100%   { transform: scale(0.4); opacity: 0; }
+
+  0%,
+  25% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+
+  30% {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+
+  70% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
 }
 
 #pill-text-wrap {
@@ -1159,10 +1240,10 @@ body.panel-open #panel-card {
 #pill-close {
   width: 22px;
   height: 22px;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 50%;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 11px;
   cursor: pointer;
   display: flex;
@@ -1173,7 +1254,7 @@ body.panel-open #panel-card {
 }
 
 #pill-close:hover {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
@@ -1185,7 +1266,7 @@ body.panel-open #panel-card {
   width: 80px;
   height: 80px;
   padding: 0;
-  background: rgba(26,82,118,0.75);
+  background: rgba(26, 82, 118, 0.75);
   backdrop-filter: blur(16px);
   border: 1.5px solid var(--accent-light);
   border-radius: 50%;
@@ -1202,7 +1283,7 @@ body.panel-open #panel-card {
   gap: 0.3rem;
   z-index: 1001;
   text-align: center;
-  box-shadow: 0 4px 16px rgba(26,82,118,0.5);
+  box-shadow: 0 4px 16px rgba(26, 82, 118, 0.5);
 }
 
 #inspo-trigger::before {
@@ -1210,25 +1291,30 @@ body.panel-open #panel-card {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(160,207,238,0.5);
+  border: 2px solid rgba(160, 207, 238, 0.5);
   animation: trigger-pulse 2.5s ease-out infinite;
 }
 
 @keyframes trigger-pulse {
-  0%   { transform: scale(1);   opacity: 0.8; }
-  70%  { transform: scale(1.2); opacity: 0; }
-  100% { transform: scale(1.2); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  70% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
 }
 
 #inspo-trigger:hover {
-  background: rgba(26,82,118,0.92);
+  background: rgba(26, 82, 118, 0.92);
   border-color: white;
-  transform: scale(1.05);
-}
-
-#inspo-trigger:hover {
-  background-color: rgba(26,82,118,0.75);
-  border-color: rgba(160,207,238,0.7);
   transform: scale(1.05);
 }
 
@@ -1238,15 +1324,20 @@ body.panel-open #panel-card {
 }
 
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* dark overlay behind the panel */
 #inspo-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(3px);
   z-index: 2000;
   opacity: 0;
@@ -1268,15 +1359,15 @@ body.panel-open #panel-card {
   z-index: 2100;
   width: 90%;
   max-width: 580px;
-  background-color: rgba(26,82,118,0.82);
+  background-color: rgba(26, 82, 118, 0.82);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(160,207,238,0.25);
+  border: 1px solid rgba(160, 207, 238, 0.25);
   border-radius: 20px;
   padding: 2rem 2rem 1.75rem;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s, transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  transition: opacity 0.3s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #inspo-panel.visible {
@@ -1287,19 +1378,26 @@ body.panel-open #panel-card {
 
 #inspo-close {
   position: absolute;
-  top: 1rem; right: 1rem;
-  width: 28px; height: 28px;
-  background-color: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
+  top: 1rem;
+  right: 1rem;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 13px;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.15s;
 }
 
-#inspo-close:hover { background-color: rgba(255,255,255,0.2); color: white; }
+#inspo-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
 
 #inspo-heading {
   font-family: 'Lora', serif;
@@ -1321,8 +1419,15 @@ body.panel-open #panel-card {
 }
 
 @keyframes bob {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-4px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 #inspo-sub {
@@ -1348,15 +1453,17 @@ body.panel-open #panel-card {
   font-weight: 300;
 }
 
-.inspo-selector { position: relative; }
+.inspo-selector {
+  position: relative;
+}
 
 .inspo-selector-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.9rem;
-  background-color: rgba(255,255,255,0.12);
-  border: 1.5px solid rgba(160,207,238,0.4);
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(160, 207, 238, 0.4);
   border-radius: 10px;
   font-family: 'Lora', serif;
   font-size: 14px;
@@ -1369,7 +1476,7 @@ body.panel-open #panel-card {
 
 .inspo-selector-btn:hover,
 .inspo-selector-btn.open {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
   border-color: var(--accent-light);
 }
 
@@ -1380,16 +1487,18 @@ body.panel-open #panel-card {
   font-style: normal;
 }
 
-.inspo-selector-btn.open .chevron { transform: rotate(180deg); }
+.inspo-selector-btn.open .chevron {
+  transform: rotate(180deg);
+}
 
 .inspo-options {
   position: absolute;
   top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(13,28,45,0.97);
+  background-color: rgba(13, 28, 45, 0.97);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(160,207,238,0.2);
+  border: 1px solid rgba(160, 207, 238, 0.2);
   border-radius: 14px;
   padding: 0.6rem;
   display: none;
@@ -1398,35 +1507,38 @@ body.panel-open #panel-card {
   z-index: 2200;
   min-width: 220px;
   justify-content: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-.inspo-options.open { display: flex; }
+.inspo-options.open {
+  display: flex;
+}
 
 .inspo-option {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.75rem;
-  background-color: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   font-family: 'Lato', sans-serif;
   font-size: 12px;
-  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   transition: background-color 0.12s, color 0.12s, border-color 0.12s;
   white-space: nowrap;
 }
 
 .inspo-option:hover {
-  background-color: rgba(160,207,238,0.12);
-  border-color: rgba(160,207,238,0.4);
+  background-color: rgba(160, 207, 238, 0.12);
+  border-color: rgba(160, 207, 238, 0.4);
   color: var(--accent-light);
 }
 
 .inspo-option.selected {
-  background-color: rgba(160,207,238,0.18);
+  background-color: rgba(160, 207, 238, 0.18);
   border-color: var(--accent-light);
   color: var(--accent-light);
   font-weight: 700;
@@ -1482,15 +1594,17 @@ body.panel-open #panel-card {
   display: none;
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  background-color: rgba(255,255,255,0.07);
+  background-color: rgba(255, 255, 255, 0.07);
   border-radius: 10px;
   font-size: 12px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   text-align: center;
   font-style: italic;
 }
 
-#inspo-result.visible { display: block; }
+#inspo-result.visible {
+  display: block;
+}
 
 #inspo-shuffle {
   display: flex;
@@ -1506,14 +1620,18 @@ body.panel-open #panel-card {
   transition: color 0.15s;
 }
 
-#inspo-shuffle:hover { color: rgba(255,255,255,0.65); }
+#inspo-shuffle:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
 
 .shuffle-icon {
   display: inline-block;
   transition: transform 0.4s;
 }
 
-#inspo-shuffle:hover .shuffle-icon { transform: rotate(180deg); }
+#inspo-shuffle:hover .shuffle-icon {
+  transform: rotate(180deg);
+}
 
 /* the key word in the intro heading - italic lora with a calligraphy underline */
 .heading-key {
@@ -1544,11 +1662,13 @@ body.panel-open #panel-card {
   stroke-linecap: round;
   stroke-dasharray: 400;
   stroke-dashoffset: 400;
-  animation: draw-underline 1.3s cubic-bezier(0.45,0,0.35,1) forwards 0.4s;
+  animation: draw-underline 1.3s cubic-bezier(0.45, 0, 0.35, 1) forwards 0.4s;
 }
 
 @keyframes draw-underline {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* small museum branding at the top of the intro */
@@ -1557,7 +1677,7 @@ body.panel-open #panel-card {
   font-size: 9px;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 1rem;
   font-weight: 700;
   display: flex;
@@ -1574,7 +1694,7 @@ body.panel-open #panel-card {
   flex: 1;
   max-width: 30px;
   height: 1px;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* stats strip below the carousel */
@@ -1609,7 +1729,7 @@ body.panel-open #panel-card {
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 700;
 }
 
@@ -1617,7 +1737,7 @@ body.panel-open #panel-card {
 .stat-divider {
   width: 1px;
   height: 32px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* sparkle divider between stats and body text */
@@ -1627,7 +1747,7 @@ body.panel-open #panel-card {
   justify-content: center;
   gap: 0.6rem;
   margin-bottom: 1.25rem;
-  color: rgba(160,207,238,0.5);
+  color: rgba(160, 207, 238, 0.5);
   font-size: 10px;
   letter-spacing: 0.5em;
   animation: rise 0.6s 0.7s both;
@@ -1638,10 +1758,53 @@ body.panel-open #panel-card {
   content: '';
   width: 30px;
   height: 1px;
-  background: rgba(160,207,238,0.25);
+  background: rgba(160, 207, 238, 0.25);
 }
+
+/* keyboard focus indicators for accessibility so that users know what element has focus when navigating with the keyboard */
+/* elements on dark navy backgrounds (header, topbar, intro, inspo panel, pill) */
+.suggestion-chip:focus-visible,
+#panel-close-btn:focus-visible,
+#panel-back-btn:focus-visible,
+#intro-cta:focus-visible,
+#inspo-trigger:focus-visible,
+#inspo-close:focus-visible,
+.inspo-selector-btn:focus-visible,
+.inspo-option:focus-visible,
+#inspo-discover:focus-visible,
+#inspo-shuffle:focus-visible,
+#pill-close:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
+/* elements on light cream backgrounds (detail card, pagination) */
+.card:focus-visible,
+#detail-close:focus-visible,
+.page-btn:focus-visible,
+#detail-va-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* carousel dots sit on varied image content - white outline reads on any background */
+.carousel-dot:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* category dropdown - replaces the existing :focus rule which removed the outline */
+#panel-category:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
+
+
 
 /* hide the header suggestions on smaller screens to save space - they aren't essential and the panel is the main focus anyway */
 @media (max-width: 900px) {
-  #header-suggestions { display: none; }
+  #header-suggestions {
+    display: none;
+  }
 }

@@ -23,32 +23,32 @@ function dismissPill() {
 
 
 // URLs for the V&A API and a variable to control how many results per page
-const API_BASE   = 'https://api.vam.ac.uk/v2/objects/search';
+const API_BASE = 'https://api.vam.ac.uk/v2/objects/search';
 const IMAGE_BASE = 'https://framemark.vam.ac.uk/collections';
-const PAGE_SIZE  = 52; // chosen to fill the grid nicely without leaving gaps when filtering for images only
+const PAGE_SIZE = 52; // chosen to fill the grid nicely without leaving gaps when filtering for images only
 
 let activeCountry = null;
-let activeLayer   = null;
-let currentPage   = 1;
+let activeLayer = null;
+let currentPage = 1;
 
 const NAME_FIXES = {
-  'United Kingdom':                  'England',
-  'United States of America':        'United States',
-  'Republic of Korea':               'Korea',
-  'Dem. Rep. Korea':                 'Korea',
-  "People's Republic of China":      'China',
-  'Iran (Islamic Republic of)':      'Iran',
-  'Viet Nam':                        'Vietnam',
-  'Syrian Arab Republic':            'Syria',
-  'Russian Federation':              'Russia',
-  'Democratic Republic of the Congo':'Congo',
-  'Republic of the Congo':           'Congo',
-  'Czechia':                         'Czech Republic',
-  'Myanmar':                         'Burma',
-  'Türkiye':                         'Turkey',
-  'Lao PDR':                         'Laos',
-  'eSwatini':                        'Swaziland',
-  'S. Sudan':                        'South Sudan',
+  'United Kingdom': 'England',
+  'United States of America': 'United States',
+  'Republic of Korea': 'Korea',
+  'Dem. Rep. Korea': 'Korea',
+  "People's Republic of China": 'China',
+  'Iran (Islamic Republic of)': 'Iran',
+  'Viet Nam': 'Vietnam',
+  'Syrian Arab Republic': 'Syria',
+  'Russian Federation': 'Russia',
+  'Democratic Republic of the Congo': 'Congo',
+  'Republic of the Congo': 'Congo',
+  'Czechia': 'Czech Republic',
+  'Myanmar': 'Burma',
+  'Türkiye': 'Turkey',
+  'Lao PDR': 'Laos',
+  'eSwatini': 'Swaziland',
+  'S. Sudan': 'South Sudan',
 };
 
 
@@ -90,27 +90,28 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{
 
 
 // styles for the country polygons - default (invisible), hovered and selected (navy blue)
-const styleDefault  = {
-  fillColor:'#000000',
-  fillOpacity:0,
-  color:'rgba(0,0,0,0.15)',
-  weight:0.5, opacity:1
+const styleDefault = {
+  fillColor: '#000000',
+  fillOpacity: 0,
+  color: 'rgba(0,0,0,0.15)',
+  weight: 0.5, opacity: 1
 };
 
 
-const styleHover    = {
-  fillColor:'#1a5276',
-  fillOpacity:0.2,
-  color:'#1a5276',
-  weight:2,
-  opacity:1 };
+const styleHover = {
+  fillColor: '#1a5276',
+  fillOpacity: 0.2,
+  color: '#1a5276',
+  weight: 2,
+  opacity: 1
+};
 
 
 const styleSelected = {
-  fillColor:'#1a5276',
-  fillOpacity:0.35, color:'#1a5276',
-  weight:2.5,
-  opacity:1
+  fillColor: '#1a5276',
+  fillOpacity: 0.35, color: '#1a5276',
+  weight: 2.5,
+  opacity: 1
 };
 
 
@@ -131,7 +132,7 @@ fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/coun
 
 document.getElementById('map').addEventListener('mousemove', e => {
   tooltip.style.left = (e.clientX + 14) + 'px';
-  tooltip.style.top  = (e.clientY - 28) + 'px';
+  tooltip.style.top = (e.clientY - 28) + 'px';
 });
 
 
@@ -186,7 +187,7 @@ function onHover(e) {
   if (e.target !== activeLayer) e.target.setStyle({ ...styleHover });
 
   const countryName = getName(e.target.feature);
-  const flagCode    = COUNTRY_FLAGS[countryName];
+  const flagCode = COUNTRY_FLAGS[countryName];
 
   // build up the tooltip content
   const flagHtml = flagCode
@@ -312,12 +313,12 @@ const COUNTRY_FLAGS = {
 // functions to open and close the country popup and load the relevant data when it's opened
 function openCountryPanel(countryName, preselectCategory) {
   activeCountry = countryName;
-  currentPage   = 1;
+  currentPage = 1;
   document.getElementById('panel-country-name').textContent = countryName;
   document.getElementById('panel-result-count').textContent = '';
 
   // inject the country flag if we have a code for it
-  const flagEl  = document.getElementById('panel-country-flag');
+  const flagEl = document.getElementById('panel-country-flag');
   const flagCode = COUNTRY_FLAGS[countryName];
   if (flagCode) {
     flagEl.className = `fi fi-${flagCode}`;
@@ -361,7 +362,7 @@ function loadCategories(countryName, preselectLabel) {
           options += `<option value="${cat.id}">${cat.value} (${cat.count.toLocaleString()})</option>`;
         });
       select.innerHTML = options;
-      select.disabled  = false;
+      select.disabled = false;
 
       // if we have a category to preselect, find its real id from the loaded list and apply it
       // this avoids the issue where artefacts were pre-filtered by the inspiration menu using a hardcoded category id that doesn't actually apply to the selected country, resulting in zero results and a confusing empty state
@@ -410,7 +411,7 @@ function fetchArtefacts(page = 1) {
   if (!activeCountry) return;
   currentPage = page;
 
-  const category   = inspoOverride?.category || document.getElementById('panel-category').value;
+  const category = inspoOverride?.category || document.getElementById('panel-category').value;
   const imagesOnly = document.getElementById('images-only').checked;
 
   showLoading();
@@ -423,8 +424,8 @@ function fetchArtefacts(page = 1) {
     // normal single fetch when showing everything
     const params = new URLSearchParams();
     params.set('q_place_name', activeCountry);
-    params.set('page_size',    PAGE_SIZE);
-    params.set('page',         currentPage);
+    params.set('page_size', PAGE_SIZE);
+    params.set('page', currentPage);
     if (category) params.set('id_category', category);
 
     fetch(`${API_BASE}?${params}`)
@@ -442,10 +443,10 @@ function fetchWithImages(page, category, collected = [], apiPage = null, totalPa
   if (apiPage === null) apiPage = (page - 1) * 2 + 1;
 
   const params = new URLSearchParams();
-  params.set('q_place_name',   activeCountry);
+  params.set('q_place_name', activeCountry);
   params.set('image_restrict', '1');
-  params.set('page_size',      PAGE_SIZE);
-  params.set('page',           apiPage);
+  params.set('page_size', PAGE_SIZE);
+  params.set('page', apiPage);
   if (category) params.set('id_category', category);
 
   fetch(`${API_BASE}?${params}`)
@@ -463,7 +464,7 @@ function fetchWithImages(page, category, collected = [], apiPage = null, totalPa
           records: collected.slice(0, PAGE_SIZE),
           info: {
             record_count: data.info.record_count,
-            pages:        Math.max(1, Math.ceil(data.info.record_count / PAGE_SIZE)),
+            pages: Math.max(1, Math.ceil(data.info.record_count / PAGE_SIZE)),
           },
         });
       } else {
@@ -476,7 +477,7 @@ function fetchWithImages(page, category, collected = [], apiPage = null, totalPa
 
 
 function renderResults(data) {
-  let records      = data.records;
+  let records = data.records;
   const totalCount = data.info.record_count;
   const totalPages = data.info.pages;
 
@@ -499,21 +500,21 @@ function renderResults(data) {
     const imgId = item._primaryImageId;
     const title = item._primaryTitle || 'Untitled';
     const place = item._primaryPlace || '';
-    const date  = item._primaryDate  || '';
+    const date = item._primaryDate || '';
 
     const imgContent = imgId
       ? `<img src="${IMAGE_BASE}/${imgId}/full/!300,300/0/default.jpg" alt="" loading="lazy">`
       : `<span class="no-img">No image</span>`;
 
     return `
-      <div class="card" onclick="openDetail(${i})">
+      <button class="card" type="button" onclick="openDetail(${i})">
         <div class="card-img">${imgContent}</div>
         <div class="card-body">
           ${place ? `<div class="card-place-badge">${place}</div>` : ''}
           <div class="card-title">${title}</div>
           ${date ? `<div class="card-date">${date}</div>` : ''}
         </div>
-      </div>`;
+      </button>`;
   }).join('');
 
   buildPagination(currentPage, totalPages);
@@ -526,7 +527,7 @@ function buildPagination(page, totalPages) {
   if (totalPages <= 1) { el.innerHTML = ''; return; }
 
   const start = Math.max(1, page - 2);
-  const end   = Math.min(totalPages, start + 4);
+  const end = Math.min(totalPages, start + 4);
 
   let html = `<button class="page-btn" onclick="fetchArtefacts(${page - 1})"
                 ${page === 1 ? 'disabled' : ''}>← Prev</button>`;
@@ -548,27 +549,27 @@ function openDetail(index) {
   const item = window._currentRecords[index];
   if (!item) return;
 
-  const imgId     = item._primaryImageId;
-  const title     = item._primaryTitle            || 'Untitled';
-  const place     = item._primaryPlace            || '—';
-  const date      = item._primaryDate             || '—';
-  const objType   = item.objectType               || '';
-  const sysNum    = item.systemNumber             || '';
-  const accession = item.accessionNumber          || '';
-  const artist    = item._primaryMaker?.name      || '—';
-  const location  = item._currentLocation?.displayName || '—';
+  const imgId = item._primaryImageId;
+  const title = item._primaryTitle || 'Untitled';
+  const place = item._primaryPlace || '—';
+  const date = item._primaryDate || '—';
+  const objType = item.objectType || '';
+  const sysNum = item.systemNumber || '';
+  const accession = item.accessionNumber || '';
+  const artist = item._primaryMaker?.name || '—';
+  const location = item._currentLocation?.displayName || '—';
 
   document.getElementById('detail-image-wrap').innerHTML = imgId
-    ? `<img src="${IMAGE_BASE}/${imgId}/full/!600,600/0/default.jpg" alt="${title.replace(/"/g,'')}">`
+    ? `<img src="${IMAGE_BASE}/${imgId}/full/!600,600/0/default.jpg" alt="${title.replace(/"/g, '')}">`
     : `<div class="detail-no-img">No image available</div>`;
 
   document.getElementById('detail-object-type').textContent = objType;
-  document.getElementById('detail-title').textContent       = title;
-  document.getElementById('detail-place').textContent       = place;
-  document.getElementById('detail-date').textContent        = date;
-  document.getElementById('detail-artist').textContent      = artist;
-  document.getElementById('detail-collection').textContent  = location;
-  document.getElementById('detail-accession').textContent   = accession ? `Acc. no. ${accession}` : '';
+  document.getElementById('detail-title').textContent = title;
+  document.getElementById('detail-place').textContent = place;
+  document.getElementById('detail-date').textContent = date;
+  document.getElementById('detail-artist').textContent = artist;
+  document.getElementById('detail-collection').textContent = location;
+  document.getElementById('detail-accession').textContent = accession ? `Acc. no. ${accession}` : '';
   document.getElementById('detail-va-link').href = `https://collections.vam.ac.uk/item/${sysNum}/`;
 
   document.getElementById('detail-overlay').classList.add('visible');
@@ -599,11 +600,11 @@ document.addEventListener('keydown', e => {
 
 // helper functions to show/hide the loading spinner and error message
 function showLoading() {
-  document.getElementById('panel-loading').style.display    = 'block';
-  document.getElementById('panel-grid').innerHTML           = '';
-  document.getElementById('panel-empty').style.display      = 'none';
-  document.getElementById('panel-error').style.display      = 'none';
-  document.getElementById('panel-pagination').innerHTML     = '';
+  document.getElementById('panel-loading').style.display = 'block';
+  document.getElementById('panel-grid').innerHTML = '';
+  document.getElementById('panel-empty').style.display = 'none';
+  document.getElementById('panel-error').style.display = 'none';
+  document.getElementById('panel-pagination').innerHTML = '';
   document.getElementById('panel-result-count').textContent = '';
 }
 
@@ -621,8 +622,8 @@ function showError() {
 
 // inspiration menu
 const inspoSelections = {
-  category: { label:'Ceramics', value:'THES48904', emoji:'🏺' },
-  country:  { label:'Japan',    value:'Japan',     flag:'jp' },
+  category: { label: 'Ceramics', value: 'THES48904', emoji: '🏺' },
+  country: { label: 'Japan', value: 'Japan', flag: 'jp' },
 };
 
 
@@ -640,8 +641,8 @@ function closeInspo() {
 
 
 function toggleSelector(type) {
-  const opts   = document.getElementById('opts-' + type);
-  const btn    = document.querySelector('#sel-' + type + ' .inspo-selector-btn');
+  const opts = document.getElementById('opts-' + type);
+  const btn = document.querySelector('#sel-' + type + ' .inspo-selector-btn');
   const isOpen = opts.classList.contains('open');
   closeAllSelectors();
   if (!isOpen) {
@@ -690,35 +691,35 @@ function discover() {
 
 const inspoAllOptions = {
   category: [
-    {label:'Ceramics',value:'THES48904',emoji:'🏺'},
-    {label:'Jewellery',value:'THES48986',emoji:'💍'},
-    {label:'Textiles',value:'THES49093',emoji:'🧵'},
-    {label:'Sculpture',value:'THES49070',emoji:'🗿'},
-    {label:'Paintings',value:'THES49048',emoji:'🖼️'},
-    {label:'Fashion',value:'THES49003',emoji:'👗'},
-    {label:'Furniture',value:'THES48943',emoji:'🪑'},
-    {label:'Photographs',value:'THES49056',emoji:'📷'},
+    { label: 'Ceramics', value: 'THES48904', emoji: '🏺' },
+    { label: 'Jewellery', value: 'THES48986', emoji: '💍' },
+    { label: 'Textiles', value: 'THES49093', emoji: '🧵' },
+    { label: 'Sculpture', value: 'THES49070', emoji: '🗿' },
+    { label: 'Paintings', value: 'THES49048', emoji: '🖼️' },
+    { label: 'Fashion', value: 'THES49003', emoji: '👗' },
+    { label: 'Furniture', value: 'THES48943', emoji: '🪑' },
+    { label: 'Photographs', value: 'THES49056', emoji: '📷' },
   ],
   country: [
-    {label:'Japan',value:'Japan',flag:'jp'},
-    {label:'China',value:'China',flag:'cn'},
-    {label:'India',value:'India',flag:'in'},
-    {label:'Italy',value:'Italy',flag:'it'},
-    {label:'France',value:'France',flag:'fr'},
-    {label:'Egypt',value:'Egypt',flag:'eg'},
-    {label:'England',value:'England',flag:'gb-eng'},
-    {label:'Iran',value:'Iran',flag:'ir'},
-    {label:'Turkey',value:'Turkey',flag:'tr'},
-    {label:'Germany',value:'Germany',flag:'de'},
-    {label:'Spain',value:'Spain',flag:'es'},
-    {label:'Korea',value:'Korea',flag:'kr'},
+    { label: 'Japan', value: 'Japan', flag: 'jp' },
+    { label: 'China', value: 'China', flag: 'cn' },
+    { label: 'India', value: 'India', flag: 'in' },
+    { label: 'Italy', value: 'Italy', flag: 'it' },
+    { label: 'France', value: 'France', flag: 'fr' },
+    { label: 'Egypt', value: 'Egypt', flag: 'eg' },
+    { label: 'England', value: 'England', flag: 'gb-eng' },
+    { label: 'Iran', value: 'Iran', flag: 'ir' },
+    { label: 'Turkey', value: 'Turkey', flag: 'tr' },
+    { label: 'Germany', value: 'Germany', flag: 'de' },
+    { label: 'Spain', value: 'Spain', flag: 'es' },
+    { label: 'Korea', value: 'Korea', flag: 'kr' },
   ],
 };
 
 
 function shuffle() {
-  ['category','country'].forEach(type => {
-    const opts   = inspoAllOptions[type];
+  ['category', 'country'].forEach(type => {
+    const opts = inspoAllOptions[type];
     const picked = opts[Math.floor(Math.random() * opts.length)];
     if (type === 'category') pick(type, picked.label, picked.value, picked.emoji);
     else pick(type, picked.label, picked.value, picked.flag);
@@ -734,9 +735,9 @@ document.addEventListener('click', e => {
 
 // carousel on the onboarding - auto-advances every few seconds but user can also click arrows or dots
 const carouselSlides = document.querySelectorAll('.carousel-slide');
-const carouselDots   = document.querySelectorAll('.carousel-dot');
-let carouselIndex    = 0;
-let carouselTimer    = null;
+const carouselDots = document.querySelectorAll('.carousel-dot');
+let carouselIndex = 0;
+let carouselTimer = null;
 
 // switch to a specific slide
 function carouselShow(i) {
