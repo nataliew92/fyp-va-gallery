@@ -754,7 +754,7 @@ body.panel-open #panel-card {
 }
 
 #detail-card {
-  background-color: var(--cream-card);
+  background-color: #faf8f5;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 14px;
   width: 100%;

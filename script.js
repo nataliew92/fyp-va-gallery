@@ -30,6 +30,7 @@ const PAGE_SIZE = 52; // chosen to fill the grid nicely without leaving gaps whe
 let activeCountry = null;
 let activeLayer = null;
 let currentPage = 1;
+let currentRecords = [];
 
 const NAME_FIXES = {
   'United Kingdom': 'England',
@@ -494,7 +495,7 @@ function renderResults(data) {
   document.getElementById('panel-result-count').innerHTML =
     `<strong>${totalCount.toLocaleString()}</strong> artefacts found`;
 
-  window._currentRecords = records;
+  currentRecords = records;
 
   document.getElementById('panel-grid').innerHTML = records.map((item, i) => {
     const imgId = item._primaryImageId;
@@ -546,7 +547,7 @@ function buildPagination(page, totalPages) {
 
 // opens the second popup showing full info about a specific artefact when a card is clicked
 function openDetail(index) {
-  const item = window._currentRecords[index];
+  const item = currentRecords[index];
   if (!item) return;
 
   const imgId = item._primaryImageId;
@@ -749,13 +750,6 @@ function carouselShow(i) {
 }
 
 
-// step forward or backward by amount (1 or -1)
-function carouselGo(amount) {
-  carouselShow(carouselIndex + amount);
-  restartCarouselTimer();
-}
-
-
 // jump straight to a specific slide when a dot is clicked
 function carouselJump(i) {
   carouselShow(i);
@@ -777,7 +771,22 @@ function startCarouselTimer() {
 
 
 if (carouselSlides.length > 0) {
-  startCarouselTimer();
+  // respect users who prefer reduced motion - don't auto-advance for them
+  // they can still navigate manually via the dots
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion) {
+    startCarouselTimer();
+  }
+}
+
+// pause auto-advance when the user hovers over or keyboard-focuses inside the carousel
+// resume when they leave - prevents the carousel ticking over while a user is reading a caption
+const carouselEl = document.getElementById('intro-carousel');
+if (carouselEl) {
+  carouselEl.addEventListener('mouseenter', () => clearInterval(carouselTimer));
+  carouselEl.addEventListener('mouseleave', startCarouselTimer);
+  carouselEl.addEventListener('focusin',  () => clearInterval(carouselTimer));
+  carouselEl.addEventListener('focusout', startCarouselTimer);
 }
 
 
