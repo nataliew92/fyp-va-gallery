@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,9 @@
 
   <!-- google fonts - lora for headings, lato for body text -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
 
   <!-- flag icons for the suggestion chips in the header -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
@@ -18,11 +21,12 @@
   <!-- my stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <!-- header -->
   <header id="header">
     <div id="header-left">
-      <h1>Museum<span class="title-spark">✦</span><em>World Collection</em></h1>
+      <h1>Museum<span class="title-spark" aria-hidden="true">✦</span><em>World Collection</em></h1>
       <p>Explore the collection through place</p>
     </div>
     <div id="header-suggestions">
@@ -58,32 +62,36 @@
   <main>
     <div id="map" role="application" aria-label="Interactive world map"></div>
     <div id="map-tooltip" role="tooltip"></div>
-    <div id="hint" aria-hidden="true">← <span>Click any country</span> to browse artefacts →</div>
+    <p id="hint" aria-hidden="true">← <span>Click any country</span> to browse artefacts →</p>
   </main>
 
   <!-- popup that appears when you click a country -->
-  <div id="overlay" onclick="handleOverlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="panel-country-name">
+  <div id="overlay" onclick="handleOverlayClick(event)" role="dialog" aria-modal="true"
+    aria-labelledby="panel-country-name">
     <article id="panel-card">
       <div id="panel-topbar">
         <div id="panel-topbar-left">
           <!-- back button closes the panel and returns the user to the map -->
           <button id="panel-back-btn" onclick="closeCountryPanel()" title="Back to map">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
             Back
           </button>
           <!-- flag gets injected here by javascript when a country is opened -->
           <span id="panel-country-flag"></span>
-          <div id="panel-country-name"></div>
-          <div id="panel-result-count"></div>
+          <h2 id="panel-country-name"></h2>
+          <p id="panel-result-count"></p>
         </div>
         <div id="panel-topbar-right">
           <label id="images-toggle-wrap">
+
             <!-- toggle to filter results to only show those with images, checked by default -->
             <input type="checkbox" id="images-only" checked onchange="fetchArtefacts(1)">
             Images only
           </label>
+
           <!-- clear the override when the category dropdown is changed manually as there were bugs in previous iteration -->
           <select id="panel-category" onchange="inspoOverride = null; fetchArtefacts(1);">
             <option value="">All categories</option>
@@ -100,34 +108,37 @@
         </div>
       </div>
       <section id="panel-body">
-        <div id="panel-loading"><div class="spinner"></div><p>Searching the collection…</p></div>
+        <div id="panel-loading">
+          <div class="spinner"></div>
+          <p>Searching the collection…</p>
+        </div>
         <!-- shown when the api comes back with nothing for the selected filters -->
         <div id="panel-empty">
           <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="28" cy="28" r="18" stroke="rgba(0,0,0,0.12)" stroke-width="2.5"/>
-            <path d="M41 41L52 52" stroke="rgba(0,0,0,0.12)" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M22 28h12M28 22v12" stroke="rgba(0,0,0,0.1)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="28" cy="28" r="18" stroke="rgba(0,0,0,0.12)" stroke-width="2.5" />
+            <path d="M41 41L52 52" stroke="rgba(0,0,0,0.12)" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M22 28h12M28 22v12" stroke="rgba(0,0,0,0.1)" stroke-width="2" stroke-linecap="round" />
           </svg>
           <p>Nothing found for this selection.</p>
-          <span>Try a different category or untick "Images only"</span>
+          <p>Try a different category or untick "Images only"</p>
         </div>
-        <div id="panel-error">Could not reach the V&amp;A API. Check your connection.</div>
+        <p id="panel-error">Could not reach the V&amp;A API. Check your connection.</p>
         <div id="panel-grid"></div>
-        <div id="panel-pagination"></div>
+        <nav id="panel-pagination" aria-label="Pagination"></nav>
       </section>
     </article>
   </div>
 
   <!-- second popup for when you click an individual artefact card -->
-<div id="detail-overlay" onclick="handleDetailOverlayClick(event)" role="dialog" aria-modal="true" aria-labelledby="detail-title">
-  <article id="detail-card">
-    
+  <div id="detail-overlay" onclick="handleDetailOverlayClick(event)" role="dialog" aria-modal="true"
+    aria-labelledby="detail-title">
+    <article id="detail-card">
       <div id="detail-top">
         <div id="detail-image-wrap"></div>
         <div id="detail-info">
           <button id="detail-close" onclick="closeDetail()">✕</button>
-          <div id="detail-object-type"></div>
-          <div id="detail-title"></div>
+          <p id="detail-object-type"></p>
+          <h2 id="detail-title"></h2>
           <div class="detail-meta-row">
             <span class="detail-meta-label">Place</span>
             <span class="detail-meta-value" id="detail-place"></span>
@@ -152,7 +163,6 @@
           View full record on V&amp;A ↗
         </a>
       </div>
-
     </article>
   </div>
 
@@ -161,49 +171,51 @@
     <div id="intro-overlay"></div>
     <div id="intro-content">
       <!-- museum branding at the top -->
-      <div id="museum-label">Museum World Collection</div>
-      <div id="intro-heading">
+      <p id="museum-label">Museum World Collection</p>
+      <h2 id="intro-heading">
         <span class="heading-key"> <!-- SVG for the animation on the heading Explore text -->
           Explore
           <svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M 4 10 C 40 4, 90 14, 130 8 S 185 4, 196 10"/>
+            <path d="M 4 10 C 40 4, 90 14, 130 8 S 185 4, 196 10" />
           </svg>
         </span>
         <br>the collection
+      </h2>
+
+      <!-- carousel showing sample artefacts pulled from the v&a api -->
+      <div id="intro-carousel">
+        <figure class="carousel-slide active">
+          <img class="carousel-image" src="images/2011FB4099.jpg"
+            alt="Cream coloured statue of a kneeling figure with arms raised upward, wearing a belted robe and a mantle draped over one shoulder.">
+          <figcaption class="carousel-caption">"St. Mary Magdalen", Statuette, France</figcaption>
+        </figure>
+
+        <figure class="carousel-slide">
+          <img class="carousel-image" src="images/2024NX3083.jpg"
+            alt="Woodblock print of a large blue wave curling from the left, its foam tipped crests poised above small boats, with Mount Fuji in the distance.">
+          <figcaption class="carousel-caption">"Thirty-Six Views of Mount Fuji", Woodblock Print, Japan</figcaption>
+        </figure>
+
+        <figure class="carousel-slide">
+          <img class="carousel-image" src="images/2006BK4653.jpg"
+            alt="Plaster cast of Gothic arcading with six columns and carved figures of saints standing within the arches between them.">
+          <figcaption class="carousel-caption">"Porte de la Vierge", Arcading, France</figcaption>
+        </figure>
+
+        <figure class="carousel-slide">
+          <img class="carousel-image" src="images/2010DY9750.jpg"
+            alt="Eggshell porcelain cup and saucer painted with a chaotic village scene of a charging bull attacking a man as bystanders scatter.">
+          <figcaption class="carousel-caption">"The Miracle of Zaandam", Cup and Saucer, China</figcaption>
+        </figure>
+
+        <!-- clickable dots to jump to a specific image -->
+        <div class="carousel-dots">
+          <button class="carousel-dot active" onclick="carouselJump(0)" aria-label="Go to image 1"></button>
+          <button class="carousel-dot" onclick="carouselJump(1)" aria-label="Go to image 2"></button>
+          <button class="carousel-dot" onclick="carouselJump(2)" aria-label="Go to image 3"></button>
+          <button class="carousel-dot" onclick="carouselJump(3)" aria-label="Go to image 4"></button>
+        </div>
       </div>
-      
-  <!-- carousel showing sample artefacts pulled from the v&a api -->
-  <div id="intro-carousel">
-
-    <div class="carousel-slide active"
-        style="background-image: url('images/2011FB4099.jpg');">
-      <div class="carousel-caption">"St. Mary Magdalen", Statuette, France</div>
-    </div>
-
-    <div class="carousel-slide"
-        style="background-image: url('images/2024NX3083.jpg');">
-      <div class="carousel-caption">"Thirty-Six Views of Mount Fuji", Woodblock Print, Japan</div>
-    </div>
-
-    <div class="carousel-slide"
-        style="background-image: url('images/2006BK4653.jpg');">
-      <div class="carousel-caption">"Porte de la Vierge", Arcading, France</div>
-    </div>
-
-    <div class="carousel-slide"
-        style="background-image: url('images/2010DY9750.jpg');">
-      <div class="carousel-caption">"The Miracle of Zaandam", Cup and Saucer, China</div>
-    </div>
-
-    <!-- clickable dots to jump to a specific image -->
-    <div class="carousel-dots">
-      <button class="carousel-dot active" onclick="carouselJump(0)" aria-label="Go to image 1"></button>
-      <button class="carousel-dot" onclick="carouselJump(1)" aria-label="Go to image 2"></button>
-      <button class="carousel-dot" onclick="carouselJump(2)" aria-label="Go to image 3"></button>
-      <button class="carousel-dot" onclick="carouselJump(3)" aria-label="Go to image 4"></button>
-    </div>
-
-  </div>
 
       <!-- stats strip showing the scale of the collection -->
       <div id="intro-stats">
@@ -211,12 +223,12 @@
           <div class="intro-stat-number">2.3M</div>
           <div class="intro-stat-label">Objects</div>
         </div>
-        <div class="stat-divider"></div>
+        <div class="stat-divider" aria-hidden="true"></div>
         <div class="intro-stat">
           <div class="intro-stat-number">180+</div>
           <div class="intro-stat-label">Countries</div>
         </div>
-        <div class="stat-divider"></div>
+        <div class="stat-divider" aria-hidden="true"></div>
         <div class="intro-stat">
           <div class="intro-stat-number">5,000</div>
           <div class="intro-stat-label">Years</div>
@@ -224,15 +236,14 @@
       </div>
 
       <!-- small decorative divider before the description -->
-      <div id="intro-divider">✦</div>
-
-      <div id="intro-body">
-        A different way to browse museum collections, led by curiosity rather than keywords. Click any country to see what's there, or let us surprise you.
-      </div>
+      <div id="intro-divider" aria-hidden="true">✦</div>
+      <p id="intro-body">A different way to browse museum collections, led by curiosity rather than keywords. Click any
+        country to see what's there, or let us surprise you.</p>
       <button id="intro-cta" onclick="dismissIntro()">
         Begin exploring
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </button>
     </div>
@@ -241,33 +252,34 @@
   <!-- bottom pill reminder -->
   <aside id="pill" role="status" aria-live="polite">
     <div id="pill-icon">
-      <div id="pill-ripple"></div>
+      <div id="pill-ripple" aria-hidden="true"></div>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 2L4 18L8 14L11 21L14 20L11 13L17 13L4 2Z" fill="white" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linejoin="round"/>
+        <path d="M4 2L4 18L8 14L11 21L14 20L11 13L17 13L4 2Z" fill="white" stroke="rgba(255,255,255,0.3)"
+          stroke-width="1" stroke-linejoin="round" />
       </svg>
     </div>
     <div id="pill-text-wrap">
-      <div id="pill-main">Click any country to explore</div>
-      <div id="pill-hint">Drag the map to navigate · scroll to zoom</div>
+      <p id="pill-main">Click any country to explore</p>
+      <p id="pill-hint">Drag the map to navigate · scroll to zoom</p>
     </div>
     <button id="pill-close" onclick="dismissPill()">✕</button>
   </aside>
 
   <!-- inspiration menu -->
   <button id="inspo-trigger" onclick="openInspo()">
-    <span class="trigger-spark">✦</span>
+    <span class="trigger-spark" aria-hidden="true">✦</span>
     <span>Need some<br>inspiration?</span>
   </button>
 
   <div id="inspo-overlay" onclick="closeInspo()"></div>
   <section id="inspo-panel" role="dialog" aria-modal="true" aria-labelledby="inspo-heading">
     <button id="inspo-close" onclick="closeInspo()">✕</button>
-    <div id="inspo-heading">
-      <span class="heading-globe">🌍</span>
+    <h2 id="inspo-heading">
+      <span class="heading-globe" aria-hidden="true">🌍</span>
       Need some inspiration?
-    </div>
+    </h2>
 
-    <div id="inspo-sub">Pick an option from each box & we'll find something for you</div>
+    <p id="inspo-sub">Pick an option from each box & we'll find something for you</p>
 
     <div id="inspo-sentence">
 
@@ -275,19 +287,27 @@
 
       <div class="inspo-selector" id="sel-category">
         <button class="inspo-selector-btn" onclick="toggleSelector('category')">
-          <span class="sel-emoji">🏺</span>
+          <span class="sel-emoji" aria-hidden="true">🏺</span>
           <span class="sel-label">Ceramics</span>
           <span class="chevron">▾</span>
         </button>
         <div class="inspo-options" id="opts-category">
-          <div class="inspo-option selected" onclick="pick('category','Ceramics','THES48904','🏺')"><span class="opt-emoji">🏺</span>Ceramics</div>
-          <div class="inspo-option" onclick="pick('category','Jewellery','THES48986','💍')"><span class="opt-emoji">💍</span>Jewellery</div>
-          <div class="inspo-option" onclick="pick('category','Textiles','THES49093','🧵')"><span class="opt-emoji">🧵</span>Textiles</div>
-          <div class="inspo-option" onclick="pick('category','Sculpture','THES49070','🗿')"><span class="opt-emoji">🗿</span>Sculpture</div>
-          <div class="inspo-option" onclick="pick('category','Paintings','THES49048','🖼️')"><span class="opt-emoji">🖼️</span>Paintings</div>
-          <div class="inspo-option" onclick="pick('category','Fashion','THES49003','👗')"><span class="opt-emoji">👗</span>Fashion</div>
-          <div class="inspo-option" onclick="pick('category','Furniture','THES48943','🪑')"><span class="opt-emoji">🪑</span>Furniture</div>
-          <div class="inspo-option" onclick="pick('category','Photographs','THES49056','📷')"><span class="opt-emoji">📷</span>Photographs</div>
+          <div class="inspo-option selected" onclick="pick('category','Ceramics','THES48904','🏺')"><span
+              class="opt-emoji" aria-hidden="true">🏺</span>Ceramics</div>
+          <div class="inspo-option" onclick="pick('category','Jewellery','THES48986','💍')"><span
+              class="opt-emoji" aria-hidden="true">💍</span>Jewellery</div>
+          <div class="inspo-option" onclick="pick('category','Textiles','THES49093','🧵')"><span
+              class="opt-emoji" aria-hidden="true">🧵</span>Textiles</div>
+          <div class="inspo-option" onclick="pick('category','Sculpture','THES49070','🗿')"><span
+              class="opt-emoji" aria-hidden="true">🗿</span>Sculpture</div>
+          <div class="inspo-option" onclick="pick('category','Paintings','THES49048','🖼️')"><span
+              class="opt-emoji" aria-hidden="true">🖼️</span>Paintings</div>
+          <div class="inspo-option" onclick="pick('category','Fashion','THES49003','👗')"><span
+              class="opt-emoji" aria-hidden="true">👗</span>Fashion</div>
+          <div class="inspo-option" onclick="pick('category','Furniture','THES48943','🪑')"><span
+              class="opt-emoji" aria-hidden="true">🪑</span>Furniture</div>
+          <div class="inspo-option" onclick="pick('category','Photographs','THES49056','📷')"><span
+              class="opt-emoji" aria-hidden="true">📷</span>Photographs</div>
         </div>
       </div>
 
@@ -300,30 +320,41 @@
           <span class="chevron">▾</span>
         </button>
         <div class="inspo-options" id="opts-country">
-          <div class="inspo-option selected" onclick="pick('country','Japan','Japan','jp')"><span class="fi fi-jp"></span>Japan</div>
-          <div class="inspo-option" onclick="pick('country','China','China','cn')"><span class="fi fi-cn"></span>China</div>
-          <div class="inspo-option" onclick="pick('country','India','India','in')"><span class="fi fi-in"></span>India</div>
-          <div class="inspo-option" onclick="pick('country','Italy','Italy','it')"><span class="fi fi-it"></span>Italy</div>
-          <div class="inspo-option" onclick="pick('country','France','France','fr')"><span class="fi fi-fr"></span>France</div>
-          <div class="inspo-option" onclick="pick('country','Egypt','Egypt','eg')"><span class="fi fi-eg"></span>Egypt</div>
-          <div class="inspo-option" onclick="pick('country','England','England','gb-eng')"><span class="fi fi-gb-eng"></span>England</div>
-          <div class="inspo-option" onclick="pick('country','Iran','Iran','ir')"><span class="fi fi-ir"></span>Iran</div>
-          <div class="inspo-option" onclick="pick('country','Turkey','Turkey','tr')"><span class="fi fi-tr"></span>Turkey</div>
-          <div class="inspo-option" onclick="pick('country','Germany','Germany','de')"><span class="fi fi-de"></span>Germany</div>
-          <div class="inspo-option" onclick="pick('country','Spain','Spain','es')"><span class="fi fi-es"></span>Spain</div>
-          <div class="inspo-option" onclick="pick('country','Korea','Korea','kr')"><span class="fi fi-kr"></span>Korea</div>
+          <div class="inspo-option selected" onclick="pick('country','Japan','Japan','jp')"><span
+              class="fi fi-jp"></span>Japan</div>
+          <div class="inspo-option" onclick="pick('country','China','China','cn')"><span class="fi fi-cn"></span>China
+          </div>
+          <div class="inspo-option" onclick="pick('country','India','India','in')"><span class="fi fi-in"></span>India
+          </div>
+          <div class="inspo-option" onclick="pick('country','Italy','Italy','it')"><span class="fi fi-it"></span>Italy
+          </div>
+          <div class="inspo-option" onclick="pick('country','France','France','fr')"><span
+              class="fi fi-fr"></span>France</div>
+          <div class="inspo-option" onclick="pick('country','Egypt','Egypt','eg')"><span class="fi fi-eg"></span>Egypt
+          </div>
+          <div class="inspo-option" onclick="pick('country','England','England','gb-eng')"><span
+              class="fi fi-gb-eng"></span>England</div>
+          <div class="inspo-option" onclick="pick('country','Iran','Iran','ir')"><span class="fi fi-ir"></span>Iran
+          </div>
+          <div class="inspo-option" onclick="pick('country','Turkey','Turkey','tr')"><span
+              class="fi fi-tr"></span>Turkey</div>
+          <div class="inspo-option" onclick="pick('country','Germany','Germany','de')"><span
+              class="fi fi-de"></span>Germany</div>
+          <div class="inspo-option" onclick="pick('country','Spain','Spain','es')"><span class="fi fi-es"></span>Spain
+          </div>
+          <div class="inspo-option" onclick="pick('country','Korea','Korea','kr')"><span class="fi fi-kr"></span>Korea
+          </div>
         </div>
       </div>
     </div>
 
     <button id="inspo-discover" onclick="discover()">
-      <span class="discover-spark">✦</span> Discover
+      <span class="discover-spark" aria-hidden="true">✦</span> Discover
     </button>
 
     <div id="inspo-result"></div>
-
     <button id="inspo-shuffle" onclick="shuffle()">
-      <span class="shuffle-icon">✦</span> Surprise me
+      <span class="shuffle-icon" aria-hidden="true">✦</span> Surprise me
     </button>
 
   </section>
@@ -335,4 +366,5 @@
   <script src="script.js"></script>
 
 </body>
+
 </html>
